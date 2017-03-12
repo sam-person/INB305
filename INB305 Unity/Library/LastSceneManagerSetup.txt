@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/DT Test Stuff/Scenes/LiveFeedTest.unity
+- path: Assets/_Main/_Scenes/VR Test scene.unity
   isLoaded: 1
   isActive: 1
