@@ -1,24 +1,46 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.Networking;
 
-public class ControllerStatsDisplay : MonoBehaviour {
+public class ControllerStatsDisplay : NetworkBehaviour {
 
-	public TextMeshPro textMesh;
+	public bool trackerMode;
 
-	private string _text;
+	public Vector3 controller1vector, controller2vector;
 
 	[SerializeField]
 	private Transform controller1;
 	[SerializeField]
 	private Transform controller2;
 
+	void Start(){
+		controller1 = NetworkManager.singleton.GetComponent<SteamControllerHolder>().controller1.transform;
+		controller2 = NetworkManager.singleton.GetComponent<SteamControllerHolder>().controller2.transform;
+	}
+
 	// Update is called once per frame
 	void Update () {
-		_text = "Controller 1: " + controller1.position.x.ToString("F3") + ", " + controller1.position.y.ToString("F3") + ", " + controller1.position.z.ToString("F3")
-			+ "\nController 2: " + controller2.position.x.ToString("F3") + ", " + controller2.position.y.ToString("F3") + ", " + controller2.position.z.ToString("F3");
+		if(!isLocalPlayer){
+			return;
+		}
+		if(trackerMode){
+			CmdUpdatePosition(controller1.position, controller2.position);
+			//CmdUpdatePosition(Vector3.back, Vector3.left);
+		}
+		
+	}
+	[Command]
+	public void CmdUpdatePosition(Vector3 pos1, Vector3 pos2){
+		RpcGetPosition(pos1, pos2);
+	}
 
-		textMesh.SetText(_text);
+	[ClientRpc]
+	public void RpcGetPosition(Vector3 pos1, Vector3 pos2){
+		controller1vector = pos1;
+		controller2vector = pos2;
+		Debug.Log("recieved tracking position " + pos1 + pos2 );
+		NetworkManager.singleton.GetComponent<SteamControllerHolder>().netcontroller1.transform.position = controller1vector;
+		NetworkManager.singleton.GetComponent<SteamControllerHolder>().netcontroller2.transform.position = controller2vector;
 	}
 }
