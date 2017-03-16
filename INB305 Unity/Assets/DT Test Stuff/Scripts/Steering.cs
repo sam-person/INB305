@@ -28,7 +28,7 @@ public class Steering : MonoBehaviour {
 		if (Input.GetKey (KeyCode.P)) {
 //			Test ();
 			rotating = true;
-			if (this.transform.rotation.eulerAngles.x < 30 || this.transform.rotation.eulerAngles.x > 340)
+			if (this.transform.rotation.eulerAngles.x < 5 || this.transform.rotation.eulerAngles.x > 345)
 				this.transform.Rotate (new Vector3 (10f, 0f, 0f));
 			
 		}
@@ -43,7 +43,7 @@ public class Steering : MonoBehaviour {
 	// Initial Function need to be called before INteracting
 	// Gets the initial point of interaction for reference.
 	public void InitialInteractPoint(Vector3 initialPoint) {
-		relativeInitialInteractPoint = initialPoint - this.transform.position;
+		relativeInitialInteractPoint = this.transform.InverseTransformPoint (initialPoint);
 	}
 
 	// Called when player is interacting with the steering
@@ -51,7 +51,7 @@ public class Steering : MonoBehaviour {
 	public void PlayerRotating(Vector3 interactPoint) {
 		rotating = true;
 		rotateTimer = 0.0f;
-		relativeInteractPoint = interactPoint - this.transform.position;
+		relativeInteractPoint = this.transform.InverseTransformPoint (interactPoint);
 
 		rightOfInteractPoint = new Vector3 (0f, 0f, 1f);
 
@@ -61,7 +61,7 @@ public class Steering : MonoBehaviour {
 			rightOfInteractPoint *= -1;
 		}
 
-//		Debug.Log ("interact: " + relativeInteractPoint + " ref: " + relativeInitialInteractPoint + " right: " + rightOfInteractPoint + " | Dot: " + Vector3.Dot (rightOfInteractPoint, relativeInitialInteractPoint));
+		Debug.Log ("interact: " + relativeInteractPoint + " ref: " + relativeInitialInteractPoint + " right: " + rightOfInteractPoint + " | Dot: " + Vector3.Dot (rightOfInteractPoint, relativeInitialInteractPoint));
 
 //		Debug.Log ("Dot: " + Vector3.Dot (rightOfInteractPoint, relativeInitialInteractPoint));
 
@@ -72,8 +72,10 @@ public class Steering : MonoBehaviour {
 
 //		this.transform.RotateAround (this.transform.position, this.transform.right, (angleRef - angleCur));
 
+//		Debug.Log ("myWorldPos: " + this.transform.TransformPoint (this.transform.position));
 		Debug.Log ("Calc Angle: " + (angleRef - angleCur) + " ref: " + relativeInitialInteractPoint + " cur: " + relativeInteractPoint);
-		this.transform.localRotation = Quaternion.Euler (new Vector3 ((angleRef - angleCur), 0f, 0f));
+//		if ((this.transform.rotation.eulerAngles.x > -30 && this.transform.rotation.eulerAngles.x < 350) || (this.transform.rotation.eulerAngles.x < 30 || this.transform.rotation.eulerAngles.x > 340))
+			this.transform.localRotation = Quaternion.Euler (new Vector3 ((angleRef - angleCur), 0f, 0f));
 //		this.transform.localRotation.SetFromToRotation (this.transform.right, relativeInteractPoint);
 
 	}
