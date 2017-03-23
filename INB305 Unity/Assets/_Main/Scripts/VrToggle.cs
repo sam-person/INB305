@@ -3,26 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VR;
 using TMPro;
+using VRTK;
 
 public class VrToggle : MonoBehaviour {
 
 	[SerializeField]
-	private GameObject VRCharacter;
-	[SerializeField]
-	private GameObject FPSCharacter;
-	[SerializeField]
 	private TextMeshProUGUI statusText;
+
 
 	public void VRMode(){
 		statusText.SetText("VR Mode");
-		Destroy(this.gameObject);
-	}
-
-	public void FPSMode(){
-		statusText.SetText("FPS Mode");
-		VRSettings.LoadDeviceByName("None");
-		VRCharacter.SetActive(false);
-		FPSCharacter.SetActive(true);
 		Destroy(this.gameObject);
 	}
 
