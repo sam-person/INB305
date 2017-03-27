@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.VR;
 using TMPro;
 using VRTK;
+using UnityEngine.Networking;
 
 public class VrToggle : MonoBehaviour {
 
@@ -18,7 +19,7 @@ public class VrToggle : MonoBehaviour {
 
 	public void TrackerMode(){
 		statusText.SetText("Tracker Mode");
-		FindObjectOfType<ControllerStatsDisplay>().trackerMode = true;
+		NetworkManager.singleton.GetComponent<GameManager>().trackerMode = true;
 		Destroy(this.gameObject);
 	}
 }

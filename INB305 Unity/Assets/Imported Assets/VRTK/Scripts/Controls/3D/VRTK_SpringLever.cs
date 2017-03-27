@@ -19,6 +19,7 @@ namespace VRTK
         public bool snapToNearestLimit = false;
         [Tooltip("If this is checked then the spring will always be active even when grabbing the lever.")]
         public bool alwaysActive = false;
+        public float springTarget;
 
         private bool wasTowardZero = true;
         private bool isGrabbed = false;
@@ -83,15 +84,18 @@ namespace VRTK
 
             if (leverHingeJoint.useSpring)
             {
-                // get normalized value
-                bool towardZero = (snapToNearestLimit ? (GetNormalizedValue() <= 50) : true);
-                if (towardZero != wasTowardZero)
-                {
-                    JointSpring leverSpring = leverHingeJoint.spring;
-                    leverSpring.targetPosition = GetSpringTarget(towardZero);
+//                // get normalized value
+//                bool towardZero = (snapToNearestLimit ? (GetNormalizedValue() <= 50) : true);
+//                if (towardZero != wasTowardZero)
+//                {
+//                    JointSpring leverSpring = leverHingeJoint.spring;
+//                    leverSpring.targetPosition = GetSpringTarget(towardZero);
+//                    leverHingeJoint.spring = leverSpring;
+//                    wasTowardZero = towardZero;
+//                }
+					JointSpring leverSpring = leverHingeJoint.spring;
+                    leverSpring.targetPosition = springTarget;
                     leverHingeJoint.spring = leverSpring;
-                    wasTowardZero = towardZero;
-                }
             }
         }
     }

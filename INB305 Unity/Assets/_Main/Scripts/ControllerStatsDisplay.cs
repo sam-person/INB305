@@ -5,8 +5,7 @@ using UnityEngine.Networking;
 
 public class ControllerStatsDisplay : NetworkBehaviour {
 
-	public bool trackerMode;
-
+	public GameObject flag;
 	public Vector3 controller1vector, controller2vector;
 
 	[SerializeField]
@@ -24,7 +23,7 @@ public class ControllerStatsDisplay : NetworkBehaviour {
 		if(!isLocalPlayer){
 			return;
 		}
-		if(trackerMode){
+		if(NetworkManager.singleton.GetComponent<GameManager>().trackerMode){
 			CmdUpdatePosition(controller1.position, controller2.position);
 			//CmdUpdatePosition(Vector3.back, Vector3.left);
 		}
@@ -39,7 +38,6 @@ public class ControllerStatsDisplay : NetworkBehaviour {
 	public void RpcGetPosition(Vector3 pos1, Vector3 pos2){
 		controller1vector = pos1;
 		controller2vector = pos2;
-		Debug.Log("recieved tracking position " + pos1 + pos2 );
 		NetworkManager.singleton.GetComponent<SteamControllerHolder>().netcontroller1.transform.position = controller1vector;
 		NetworkManager.singleton.GetComponent<SteamControllerHolder>().netcontroller2.transform.position = controller2vector;
 	}
