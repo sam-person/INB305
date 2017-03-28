@@ -26,9 +26,9 @@ public class HoverTank : MonoBehaviour {
 			body.AddForce(appliedHoverForce, ForceMode.Acceleration);
 		}
 
-		body.AddRelativeForce(0, 0, -(crank.GetValue()/100.0f) * maxspeed);
-		Debug.Log("Force " + (crank.GetValue()/100.0f) * maxspeed);
-		body.AddRelativeTorque(0, (wheel.GetValue()/100.0f) * turnrate * (crank.GetNormalizedValue()/100.0f), 0);
-		Debug.Log("Torque " + -(wheel.GetValue()/100.0f) * turnrate * Mathf.Abs((crank.GetNormalizedValue()/100.0f)));
+		float force = -(crank.GetValue()/100.0f) * maxspeed;
+		float torque = -((wheel.GetNormalizedValue()/100.0f)-0.5f) * turnrate * Mathf.Abs((crank.GetNormalizedValue()/100.0f)-0.5f);
+		body.AddRelativeForce(0, 0, force);
+		body.AddRelativeTorque(0, torque, 0);
 	}
 }
