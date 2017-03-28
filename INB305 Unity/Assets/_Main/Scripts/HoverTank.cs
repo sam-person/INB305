@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class HoverTank : MonoBehaviour {
 
-	public VRTK.VRTK_SpringLever crank;
-	public VRTK.VRTK_Wheel wheel;
+	public FakeTank_Manager controller;
 	public float hoverheight, hoverforce, maxspeed, turnrate;
 
 	private Rigidbody body;
@@ -26,9 +25,9 @@ public class HoverTank : MonoBehaviour {
 			body.AddForce(appliedHoverForce, ForceMode.Acceleration);
 		}
 
-		float force = -(crank.GetValue()/100.0f) * maxspeed;
-		float torque = -((wheel.GetNormalizedValue()/100.0f)-0.5f) * turnrate * Mathf.Abs((crank.GetNormalizedValue()/100.0f)-0.5f);
+		float force = controller.speed * maxspeed;
+		float torque = controller.rotation * turnrate * controller.speed;
 		body.AddRelativeForce(0, 0, force);
-		body.AddRelativeTorque(0, torque, 0);
+		body.AddRelativeTorque(0, controller.rotation, 0);
 	}
 }
