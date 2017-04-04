@@ -1,0 +1,117 @@
+fileFormatVersion: 2
+guid: fb36b97ad32f1b4428523d0e0f6141e2
+timeCreated: 1491312584
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Control_Crank_Base
+    100002: Control_Crank_Shaft
+    100004: Control_Dash
+    100006: Control_Triangle
+    100008: Control_Wheel
+    100010: Control_Wheel.001
+    100012: Furnance Door
+    100014: //RootNode
+    100016: Shovel
+    400000: Control_Crank_Base
+    400002: Control_Crank_Shaft
+    400004: Control_Dash
+    400006: Control_Triangle
+    400008: Control_Wheel
+    400010: Control_Wheel.001
+    400012: Furnance Door
+    400014: //RootNode
+    400016: Shovel
+    2300000: Control_Crank_Base
+    2300002: Control_Crank_Shaft
+    2300004: Control_Dash
+    2300006: Control_Triangle
+    2300008: Control_Wheel
+    2300010: Control_Wheel.001
+    2300012: Furnance Door
+    2300014: Shovel
+    3300000: Control_Crank_Base
+    3300002: Control_Crank_Shaft
+    3300004: Control_Dash
+    3300006: Control_Triangle
+    3300008: Control_Wheel
+    3300010: Control_Wheel.001
+    3300012: Furnance Door
+    3300014: Shovel
+    4300000: Control_Wheel.001
+    4300002: Furnance Door
+    4300004: Shovel
+    4300006: Control_Triangle
+    4300008: Control_Wheel
+    4300010: Control_Crank_Shaft
+    4300012: Control_Crank_Base
+    4300014: Control_Dash
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
