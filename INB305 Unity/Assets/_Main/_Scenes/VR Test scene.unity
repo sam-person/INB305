@@ -3085,6 +3085,7 @@ GameObject:
   - component: {fileID: 1369068179}
   - component: {fileID: 1369068178}
   - component: {fileID: 1369068177}
+  - component: {fileID: 1369068180}
   m_Layer: 0
   m_Name: Marshmello
   m_TagString: Shovel
@@ -3155,6 +3156,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1369068175}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1369068180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1369068175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86ed9a9e37464417cab23a77982b2c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1374453038
 GameObject:
   m_ObjectHideFlags: 0
@@ -3915,6 +3927,87 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1524659119}
+--- !u!1 &1560003092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1560003096}
+  - component: {fileID: 1560003095}
+  - component: {fileID: 1560003094}
+  - component: {fileID: 1560003093}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1560003093
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1560003092}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!65 &1560003094
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1560003092}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1560003095
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1560003092}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1560003096
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1560003092}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -3.7599993, y: 0.005713871, z: 0}
+  m_LocalScale: {x: 0.071428604, y: 8, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1656001966}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &1614124160
 GameObject:
   m_ObjectHideFlags: 0
@@ -4010,6 +4103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shovelScript: {fileID: 1656001968}
+  maxAngle: 75
   giveMultiplier: 0.2
   minVelocty: 1.5
 --- !u!1 &1656001962
@@ -4091,16 +4185,17 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1656001962}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.07015021, y: 0.07015021, z: -0.70361847, w: 0.70361847}
   m_LocalPosition: {x: -1.014, y: 24.735, z: -0.641}
   m_LocalScale: {x: 0.05, y: 0.7, z: 0.05}
   m_Children:
   - {fileID: 1328500844}
   - {fileID: 1689315543}
   - {fileID: 1369068176}
+  - {fileID: 1560003096}
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 11.387, y: 0, z: -90.00001}
 --- !u!54 &1656001967
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4129,7 +4224,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coalAmount: 0
   maxAmount: 10
+  isUpsideDown: 0
   velocity: {x: 0, y: 0, z: 0}
+  tipScript: {fileID: 0}
+  shovelTip: {fileID: 0}
 --- !u!114 &1656001969
 MonoBehaviour:
   m_ObjectHideFlags: 0
