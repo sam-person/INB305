@@ -17,22 +17,32 @@ public class CoalPile : MonoBehaviour {
 	float angle = 0.0f;
 
 	void Update() {
-		Debug.DrawLine (projection, this.transform.position, Color.blue);
-		Debug.DrawLine (otherPos, this.transform.position, Color.red);
-		Debug.DrawLine (otherPos, vel.normalized, Color.green);
+		Debug.DrawLine (projection + this.transform.position, this.transform.position, Color.blue);
+		Debug.DrawLine (otherPos + this.transform.position, this.transform.position, Color.red);
+		Debug.DrawLine (vel.normalized + this.transform.position, this.transform.position, Color.green);
+		
 //		Debug.DrawRay (otherPos, vel, Color.green);
 	}
 
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Shovel")) {
 			// Convert to local
-			otherPos = other.transform.position;
-			otherPos = this.transform.InverseTransformPoint (otherPos);
-			vel = shovelScript.velocity;
-			vel = this.transform.InverseTransformPoint (vel);
-			projection = new Vector3 (otherPos.x, 0f, otherPos.z);
-			float angle = Vector3.Angle (projection.normalized, vel.normalized);
-			Debug.Log ("Shovel angle: " + angle);
+			Debug.Log("rotation: " + Vector3.Angle(other.transform.rotation.eulerAngles, Vector3.up));
+			Rigidbody attach = other.transform.parent.GetComponent<Rigidbody> ();
+			if (attach) {
+				Debug.Log ("attached: " + attach.velocity);
+			}
+//			otherPos = other.transform.position;
+//			otherPos = this.transform.InverseTransformPoint (otherPos);
+//			Debug.Log ("rel shovel pos: " + otherPos);
+//			vel = shovelScript.rb.velocity;
+//			Debug.Log ("vel: " + vel);
+//			vel = this.transform.InverseTransformPoint (vel);
+//			Debug.Log ("rel vel: " + vel);
+//			projection = new Vector3 (-otherPos.x, 0f, -otherPos.z);
+//			Debug.Log ("rel projection: " + projection);
+//			float angle = Vector3.Angle (projection.normalized, vel.normalized);
+//			Debug.Log ("Shovel angle: " + angle);
 
 			// Check if entry angle is greater than max
 			if (angle <= maxAngle) {

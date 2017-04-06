@@ -17,8 +17,11 @@ public class Shovel : MonoBehaviour {
 	public ShovelTip tipScript;
 	public Transform shovelTip;
 
+	public Rigidbody rb;
+
 	void Start() {
 		next = this.transform.position;
+		rb = GetComponent<Rigidbody> ();
 	}
 
 	void Update() {
@@ -41,6 +44,7 @@ public class Shovel : MonoBehaviour {
 		next = this.transform.position;
 
 		velocity = (next - prev) / Time.deltaTime;
+		//Debug.Log ("shovel script rb: " + rb.velocity);
 	}
 
 	void CheckXZAngle() {
