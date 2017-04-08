@@ -6,7 +6,7 @@ public class CoalPile : MonoBehaviour {
 
 	public Shovel shovelScript;
 	public float maxAngle = 75f;
-	public float giveMultiplier = 0.5f;
+	float giveMultiplier = 0.8f;
 	public float minVelocty = 1.5f;
 	float giveAmount = 0.0f;
 	float magnitude = 0.0f;
@@ -27,34 +27,34 @@ public class CoalPile : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Shovel")) {
 			// Convert to local
-			Debug.Log("rotation: " + Vector3.Angle(other.transform.rotation.eulerAngles, Vector3.up));
-			Rigidbody attach = other.transform.parent.GetComponent<Rigidbody> ();
-			if (attach) {
-				Debug.Log ("attached: " + attach.velocity);
-			}
-//			otherPos = other.transform.position;
-//			otherPos = this.transform.InverseTransformPoint (otherPos);
+//			Debug.Log("rotation: " + Vector3.Angle(other.transform.rotation.eulerAngles, Vector3.up));
+//			Rigidbody attach = other.transform.parent.GetComponent<Rigidbody> ();
+//			if (attach) {
+//				Debug.Log ("attached: " + attach.velocity);
+//			}
+
+			otherPos = this.transform.InverseTransformPoint (other.transform.position);
 //			Debug.Log ("rel shovel pos: " + otherPos);
-//			vel = shovelScript.rb.velocity;
+			vel = shovelScript.velocity;
 //			Debug.Log ("vel: " + vel);
-//			vel = this.transform.InverseTransformPoint (vel);
-//			Debug.Log ("rel vel: " + vel);
-//			projection = new Vector3 (-otherPos.x, 0f, -otherPos.z);
+			projection = new Vector3 (-otherPos.x, 0f, -otherPos.z);
 //			Debug.Log ("rel projection: " + projection);
-//			float angle = Vector3.Angle (projection.normalized, vel.normalized);
-//			Debug.Log ("Shovel angle: " + angle);
+			float angle = Vector3.Angle (projection.normalized, vel.normalized);
+			Debug.Log ("Shovel angle: " + angle);
 
 			// Check if entry angle is greater than max
 			if (angle <= maxAngle) {
 				// Check if shovel is upsidedown
 				if (!shovelScript.isUpsideDown) {
-					magnitude = shovelScript.velocity.magnitude * giveMultiplier;
-//			Debug.Log("initial vel: " + shovelScript.velocity.magnitude + " with multiplier: " + magnitude);
+					magnitude = vel.magnitude * giveMultiplier;
+					Debug.Log ("initial vel: " + vel.magnitude + " with multiplier " + giveMultiplier + ": " + magnitude);
 					giveAmount = Mathf.Clamp (magnitude, 0, shovelScript.maxAmount);
-					if (giveAmount > shovelScript.coalAmount && magnitude > minVelocty) {
+					if (magnitude > minVelocty) {
 						shovelScript.coalAmount = giveAmount;
 					}
 				}
+			} else {
+				Debug.Log ("Unacceptable angle: " + angle);
 			}
 		}
 	}

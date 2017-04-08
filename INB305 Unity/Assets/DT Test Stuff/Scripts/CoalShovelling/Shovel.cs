@@ -5,7 +5,7 @@ using UnityEngine;
 public class Shovel : MonoBehaviour {
 
 	public float coalAmount = 0.0f;
-	public float maxAmount;
+	public float maxAmount = 20f;
 
 	public bool isUpsideDown = false;
 
@@ -44,7 +44,7 @@ public class Shovel : MonoBehaviour {
 		next = this.transform.position;
 
 		velocity = (next - prev) / Time.deltaTime;
-		//Debug.Log ("shovel script rb: " + rb.velocity);
+//		Debug.Log ("shovel script calc vel: " + velocity);
 	}
 
 	void CheckXZAngle() {
@@ -53,9 +53,9 @@ public class Shovel : MonoBehaviour {
 			// need to get angle and take from boundaries
 			// then divide by something, multiply by time.delta (implies timer)
 			// then take from coal amount
-			LoseCoal (1);
+//			LoseCoal (1);
 		} else if (300 > this.transform.eulerAngles.z && this.transform.eulerAngles.z > 230f) {
-			LoseCoal (1);
+//			LoseCoal (1);
 		}
 	}
 
@@ -77,6 +77,7 @@ public class Shovel : MonoBehaviour {
 
 	// coal falling out of shovel
 	void LoseCoal(float amount) {
+		Debug.Log ("Losing coal: " + amount);
 		coalAmount -= amount;
 		coalAmount = Mathf.Clamp (coalAmount, 0f, maxAmount);
 	}
