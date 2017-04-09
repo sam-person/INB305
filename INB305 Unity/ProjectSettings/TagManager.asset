@@ -8,8 +8,8 @@ TagManager:
   - projectile
   - ExcludeTeleport
   - Coal
-  - Furnance
   - Shovel
+  - Furnace
   layers:
   - Default
   - TransparentFX

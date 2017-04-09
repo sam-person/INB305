@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Shovel : MonoBehaviour {
 
+	// Meta
 	public float coalAmount = 0.0f;
 	public float maxAmount = 20f;
 
+	// Tilt detection
 	public bool isUpsideDown = false;
+	public bool isTipping = false;
 	float lossRate = 4f;
 	Vector2 Xmin = new Vector2 (320f, 40f);
 	Vector2 Xmax = new Vector2 (290f, 70f);
-
 	Vector2 Zmin = new Vector2 (335f, 25f);
 	Vector2 Zmax = new Vector2 (280f, 80f);
 
@@ -20,25 +22,24 @@ public class Shovel : MonoBehaviour {
 	Vector3 next = new Vector3();
 	public Vector3 velocity = new Vector3();
 
-	public ShovelTip tipScript;
+	// Reference
+	public ShovelTip shovelTipScript;
 	public Transform shovelTip;
-
-	public Rigidbody rb;
+	public Furnace furnaceScript;
 
 	void Start() {
 		next = this.transform.position;
-		rb = GetComponent<Rigidbody> ();
 	}
 
 	void Update() {
-
 		CalculateVelocity ();
 
 		if (Input.GetKeyDown (KeyCode.P)) {
 			coalAmount = 0.0f;
 		}
 
-		if (!tipScript.IsInCoal) {
+		if (!shovelTipScript.isInCoal) {
+
 			CheckXZAngle ();
 		}
 
@@ -54,42 +55,43 @@ public class Shovel : MonoBehaviour {
 	}
 
 	void CheckXZAngle() {
-		float angle = 0.0f;
+
 		if (Xmin.x > this.transform.eulerAngles.x && this.transform.eulerAngles.x > Xmin.y) {
-			// lose coal based on angle amount
-			// need to get angle and take from boundaries
-			// then divide by something, multiply by time.delta (implies timer)
-			// then take from coal amount
-
-			if (Xmax.x > this.transform.eulerAngles.x && this.transform.eulerAngles.x > Xmax.y) {
-				LoseCoal (lossRate * Time.deltaTime);
-			} else {
-				angle = this.transform.eulerAngles.x;
-				if (angle > 180f) {
-					angle = Mathf.Abs (angle - 360f);
-				}
-
-				LoseCoal (lossRate * angle / Xmax.y * Time.deltaTime);
-			}
-
+			LossCalculation (this.transform.eulerAngles.x, Xmax);
 		} else if (Zmin.x > this.transform.eulerAngles.z && this.transform.eulerAngles.z > Zmin.y) {
-
-			if (Zmax.x > this.transform.eulerAngles.z && this.transform.eulerAngles.z > Zmax.y) {
-				LoseCoal (lossRate * Time.deltaTime);
-			} else {
-				angle = this.transform.eulerAngles.z;
-				if (angle > 180f) {
-					angle = Mathf.Abs (angle - 360f);
-				}
-
-				LoseCoal (lossRate * angle / Zmax.y * Time.deltaTime);
-			}
+			LossCalculation (this.transform.eulerAngles.z, Zmax);
+		} else {
+			isTipping = false;
 		}
+
+	}
+
+	void LossCalculation(float angle, Vector2 max) {
+		float lossAmount = 0.0f;
+
+		isTipping = true;
+		if (max.x > angle && angle > max.y) {
+			lossAmount = lossRate * Time.deltaTime;
+		} else {
+			if (angle > 180f) {
+				angle = Mathf.Abs (angle - 360f);
+			}
+			lossAmount = lossRate * angle / max.y * Time.deltaTime;
+		}
+
+		if (shovelTipScript.isInFurnace) {
+			furnaceScript.AcceptFuel (lossAmount);
+		}
+
+		LoseCoal (lossAmount);
 	}
 
 	void CheckUpAngle() {
-		if (Vector3.Angle (this.transform.up, Vector3.up) > 90f) {
+		if (Vector3.Angle (this.transform.up, Vector3.up) > 80f) {
 			isUpsideDown = true;
+			if (shovelTipScript.isInFurnace) {
+				furnaceScript.AcceptFuel (maxAmount);
+			}
 			LoseCoal (maxAmount);
 		} else {
 			isUpsideDown = false;

@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class ShovelTip : MonoBehaviour {
 
-	public bool IsInCoal {get; set;}
-//	float colliderTimer = 0.0f;
-//	float colliderTime = 0.5f;
+	public bool isInCoal = false;
+	public bool isInFurnace = false;
 
 	void OnTriggerStay(Collider other) {
 		if (other.CompareTag ("Coal")) {
-			IsInCoal = true;
+			isInCoal = true;
+		} else if (other.CompareTag ("Furnace")) {
+			isInFurnace = true;
 		}
 	}
 
 	void OnTriggerExit(Collider other) {
 		if (other.CompareTag ("Coal")) {
-			IsInCoal = false;
+			isInCoal = false;
+		} else if (other.CompareTag ("Furnace")) {
+			isInFurnace = false;
 		}
 	}
 }

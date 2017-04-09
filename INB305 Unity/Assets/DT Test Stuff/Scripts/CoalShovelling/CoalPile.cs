@@ -40,14 +40,14 @@ public class CoalPile : MonoBehaviour {
 			projection = new Vector3 (-otherPos.x, 0f, -otherPos.z);
 //			Debug.Log ("rel projection: " + projection);
 			float angle = Vector3.Angle (projection.normalized, vel.normalized);
-			Debug.Log ("Shovel angle: " + angle);
+//			Debug.Log ("Shovel angle: " + angle);
 
 			// Check if entry angle is greater than max
 			if (angle <= maxAngle) {
 				// Check if shovel is upsidedown
 				if (!shovelScript.isUpsideDown) {
 					magnitude = vel.magnitude * giveMultiplier;
-					Debug.Log ("initial vel: " + vel.magnitude + " with multiplier " + giveMultiplier + ": " + magnitude);
+//					Debug.Log ("initial vel: " + vel.magnitude + " with multiplier " + giveMultiplier + ": " + magnitude);
 					giveAmount = Mathf.Clamp (magnitude, 0, shovelScript.maxAmount);
 					if (magnitude > minVelocty) {
 						shovelScript.coalAmount = giveAmount;
