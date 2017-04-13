@@ -16,6 +16,7 @@ public class CoalOnShovel : MonoBehaviour {
 	}
 	
 	public void SetScale(float scale) {
-//		currentScale = 
+		currentScale.y = scale;
+		this.transform.localScale = currentScale;
 	}
 }

@@ -24,6 +24,7 @@ public class Shovel : MonoBehaviour {
 
 	// Reference
 	public ShovelTip shovelTipScript;
+	public CoalOnShovel coalShovelScript;
 	public Transform shovelTip;
 	public Furnace furnaceScript;
 
@@ -102,5 +103,6 @@ public class Shovel : MonoBehaviour {
 	void LoseCoal(float amount) {
 //		Debug.Log ("Losing coal: " + amount);
 		coalAmount = Mathf.Clamp (coalAmount - amount, 0f, maxAmount);
+		coalShovelScript.SetScale (coalAmount / maxAmount);
 	}
 }
