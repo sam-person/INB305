@@ -6,7 +6,7 @@ public class CoalPile : MonoBehaviour {
 
 	public Shovel shovelScript;
 	public float maxAngle = 75f;
-	float giveMultiplier = 0.8f;
+	public float giveMultiplier = 5f;
 	public float minVelocty = 1.5f;
 	float giveAmount = 0.0f;
 	float magnitude = 0.0f;
@@ -51,6 +51,7 @@ public class CoalPile : MonoBehaviour {
 					giveAmount = Mathf.Clamp (magnitude, 0, shovelScript.maxAmount);
 					if (magnitude > minVelocty) {
 						shovelScript.coalAmount = giveAmount;
+						shovelScript.LoseCoal (0f);
 					}
 				}
 			} else {

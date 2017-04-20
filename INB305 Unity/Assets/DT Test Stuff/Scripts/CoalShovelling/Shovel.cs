@@ -39,10 +39,9 @@ public class Shovel : MonoBehaviour {
 			coalAmount = 0.0f;
 		}
 
-		if (!shovelTipScript.isInCoal) {
-
-			CheckXZAngle ();
-		}
+//		if (!shovelTipScript.isInCoal) {
+//			CheckXZAngle ();
+//		}
 
 		CheckUpAngle ();
 	}
@@ -88,10 +87,10 @@ public class Shovel : MonoBehaviour {
 	}
 
 	void CheckUpAngle() {
-		if (Vector3.Angle (this.transform.up, Vector3.up) > 80f) {
+		if (Vector3.Angle (this.transform.up, Vector3.up) > 90f) {
 			isUpsideDown = true;
-			if (shovelTipScript.isInFurnace) {
-				furnaceScript.AcceptFuel (maxAmount);
+			if (shovelTipScript.isInFurnace && coalAmount > 0) {
+				furnaceScript.AcceptFuel (coalAmount);
 			}
 			LoseCoal (maxAmount);
 		} else {
@@ -100,7 +99,7 @@ public class Shovel : MonoBehaviour {
 	}
 
 	// coal falling out of shovel
-	void LoseCoal(float amount) {
+	public void LoseCoal(float amount) {
 //		Debug.Log ("Losing coal: " + amount);
 		coalAmount = Mathf.Clamp (coalAmount - amount, 0f, maxAmount);
 		coalShovelScript.SetScale (coalAmount / maxAmount);

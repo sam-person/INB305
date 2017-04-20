@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FakeTank_Manager : MonoBehaviour {
 	public float speed, rotation;
@@ -8,11 +9,11 @@ public class FakeTank_Manager : MonoBehaviour {
 	public VRTK.VRTK_SpringLever crank;
 	public VRTK.VRTK_Wheel wheel;
 	public float minimumSpeed, fuelThreshold, fuelConsumption;
+	public Image fuelBar, speedBar, reverseBar;
 	[Header("Stats")]
 	[Range(0,1)]
 	public float fuel = 1;
 	public float underThresholdClamp;
-
 	public TMPro.TextMeshPro display;
 
 	// Use this for initialization
@@ -27,10 +28,13 @@ public class FakeTank_Manager : MonoBehaviour {
 			underThresholdClamp = Mathf.Max(minimumSpeed,Mathf.InverseLerp(0,fuelThreshold, fuel));
 			speed = Mathf.Clamp(speed, -underThresholdClamp, underThresholdClamp);
 		}
-		rotation = -((wheel.GetNormalizedValue()/100.0f)-0.5f);
+		rotation = (wheel.GetNormalizedValue()/100.0f)-0.5f;
 		fuel = Mathf.Max(0,fuel-(fuelConsumption*Time.deltaTime*0.001f));
 
 		display.text = "Speed: " + (speed * 100.0f).ToString("F2") + "\nRotation: " + (rotation * 100.0f).ToString("F2") + "\nFuel: " + (fuel * 100.0f).ToString("F2");
+		fuelBar.fillAmount = fuel;
+		speedBar.fillAmount = speed;
+		reverseBar.fillAmount = -speed;
 	}
 
 
