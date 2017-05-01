@@ -34,3 +34,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 INB305 Unity/Library/metadata/*
+INB305 Unity/Library/ScriptAssemblies/BuiltinAssemblies.stamp

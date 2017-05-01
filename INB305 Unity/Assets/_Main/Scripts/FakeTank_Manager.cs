@@ -16,6 +16,8 @@ public class FakeTank_Manager : MonoBehaviour {
 	public float underThresholdClamp;
 	public TMPro.TextMeshPro display;
 
+	public EngineSound engineSound;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -24,6 +26,7 @@ public class FakeTank_Manager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		speed = (-(crank.GetNormalizedValue()/100.0f)+0.5f)*2.0f;
+		EngineAudio ();
 		if(fuel < fuelThreshold){
 			underThresholdClamp = Mathf.Max(minimumSpeed,Mathf.InverseLerp(0,fuelThreshold, fuel));
 			speed = Mathf.Clamp(speed, -underThresholdClamp, underThresholdClamp);
@@ -37,5 +40,12 @@ public class FakeTank_Manager : MonoBehaviour {
 		reverseBar.fillAmount = -speed;
 	}
 
+	void EngineAudio() {
+		if (-0.01f <= speed && speed <= 0.01f)
+			engineSound.TransitionToIdle ();
+		else
+			engineSound.TransitionToDriving ();
 
+		engineSound.SetVolume (fuel + 0.5f);
+	}
 }

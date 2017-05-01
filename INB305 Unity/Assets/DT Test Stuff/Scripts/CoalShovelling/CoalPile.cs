@@ -39,7 +39,7 @@ public class CoalPile : MonoBehaviour {
 //			Debug.Log ("vel: " + vel);
 			projection = new Vector3 (-otherPos.x, 0f, -otherPos.z);
 //			Debug.Log ("rel projection: " + projection);
-			float angle = Vector3.Angle (projection.normalized, vel.normalized);
+			angle = Vector3.Angle (projection.normalized, vel.normalized);
 //			Debug.Log ("Shovel angle: " + angle);
 
 			// Check if entry angle is greater than max

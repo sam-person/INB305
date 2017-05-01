@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CoalOnShovel : MonoBehaviour {
 
-	BoxCollider boxCollider;
+//	BoxCollider boxCollider;
 	Vector3 maxScale = new Vector3();
 	Vector3 currentScale = new Vector3();
 
@@ -14,7 +14,7 @@ public class CoalOnShovel : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		boxCollider = GetComponent<BoxCollider> ();
+//		boxCollider = GetComponent<BoxCollider> ();
 		maxScale = transform.localScale;
 		currentScale = maxScale;
 
