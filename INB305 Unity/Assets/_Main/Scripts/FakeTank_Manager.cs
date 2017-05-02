@@ -18,6 +18,13 @@ public class FakeTank_Manager : MonoBehaviour {
 
 	public EngineSound engineSound;
 
+	// Low Fuel Alarms
+	bool lowFuel = false;
+	float lowFuelThreshold = 0.1f;
+	public GameObject[] normalLights;
+	public GameObject[] alarmLights;
+	public AlarmSound alarmSound;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -33,6 +40,7 @@ public class FakeTank_Manager : MonoBehaviour {
 		}
 		rotation = (wheel.GetNormalizedValue()/100.0f)-0.5f;
 		fuel = Mathf.Max(0,fuel-(fuelConsumption*Time.deltaTime*0.001f));
+		CheckLowFuel ();
 
 		display.text = "Speed: " + (speed * 100.0f).ToString("F2") + "\nRotation: " + (rotation * 100.0f).ToString("F2") + "\nFuel: " + (fuel * 100.0f).ToString("F2");
 		fuelBar.fillAmount = fuel;
@@ -47,5 +55,29 @@ public class FakeTank_Manager : MonoBehaviour {
 			engineSound.TransitionToDriving ();
 
 		engineSound.SetVolume (fuel + 0.5f);
+	}
+
+	void CheckLowFuel() {
+		if (!lowFuel && fuel <= lowFuelThreshold) {
+			lowFuel = true;
+			ToggleAlarmLights (true);
+			alarmSound.StartAlarm ();
+		}
+		if (lowFuel && fuel > lowFuelThreshold) {
+			lowFuel = false;
+			ToggleAlarmLights (false);
+			alarmSound.StopAlarm ();
+		}
+
+	}
+
+	void ToggleAlarmLights(bool state) {
+		for (int i = 0; i < alarmLights.Length; i++) {
+			alarmLights [i].SetActive (state);
+		}
+
+		for (int i = 0; i < normalLights.Length; i++) {
+			normalLights [i].SetActive (!state);
+		}
 	}
 }
