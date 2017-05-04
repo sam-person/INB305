@@ -21,13 +21,16 @@ public class FakeTank_Manager : MonoBehaviour {
 	// Low Fuel Alarms
 	bool lowFuel = false;
 	float lowFuelThreshold = 0.1f;
-	public GameObject[] normalLights;
+	public Light[] normalLights;
 	public GameObject[] alarmLights;
 	public AlarmSound alarmSound;
+	public Color dimmedRedLightColor;
+	Color originalLightColor;
+	public Vector2 lightIntensityThresholds = new Vector2();
 
 	// Use this for initialization
 	void Start () {
-		
+		originalLightColor = normalLights [0].color;
 	}
 	
 	// Update is called once per frame
@@ -49,25 +52,60 @@ public class FakeTank_Manager : MonoBehaviour {
 	}
 
 	void EngineAudio() {
-		if (-0.01f <= speed && speed <= 0.01f)
-			engineSound.TransitionToIdle ();
-		else
-			engineSound.TransitionToDriving ();
+//		if (-0.01f <= speed && speed <= 0.01f)
+//			engineSound.TransitionToIdle ();
+//		else
+//			engineSound.TransitionToDriving ();
+
+		engineSound.SetPitch (speed);
 
 		engineSound.SetVolume (fuel + 0.5f);
 	}
 
 	void CheckLowFuel() {
-		if (!lowFuel && fuel <= lowFuelThreshold) {
-			lowFuel = true;
-			ToggleAlarmLights (true);
-			alarmSound.StartAlarm ();
+
+		if (fuel < fuelThreshold) {
+
+			if (!alarmSound.IsPlaying) {
+				alarmSound.StartAlarm ();
+				alarmSound.SetVolume (0.3f);
+			}
+
+
+			if (fuel < (fuelThreshold * 0.5f)) {
+				alarmSound.SetVolume (0.5f);
+				DimLights ();
+				if (!alarmLights [0].activeSelf)
+					ToggleAlarmLights (true);
+
+				if (fuel <= 0 && !normalLights [0].color.Equals (dimmedRedLightColor)) {
+					SetLightColour (dimmedRedLightColor);
+					alarmSound.SetVolume ();
+
+				}
+
+				if (fuel > 0 && !normalLights [0].color.Equals (originalLightColor)) {
+					SetLightColour (originalLightColor);
+				}
+			} else {
+				if (alarmLights[0].activeSelf)
+					ToggleAlarmLights (false);
+			}
+		} else {
+			if (alarmSound.IsPlaying)
+				alarmSound.StopAlarm ();
 		}
-		if (lowFuel && fuel > lowFuelThreshold) {
-			lowFuel = false;
-			ToggleAlarmLights (false);
-			alarmSound.StopAlarm ();
-		}
+
+//		if (!lowFuel && fuel <= lowFuelThreshold) {
+//			lowFuel = true;
+//			ToggleAlarmLights (true);
+//			alarmSound.StartAlarm ();
+//		}
+//		if (lowFuel && fuel > lowFuelThreshold) {
+//			lowFuel = false;
+//			ToggleAlarmLights (false);
+//			alarmSound.StopAlarm ();
+//		}
 
 	}
 
@@ -75,9 +113,20 @@ public class FakeTank_Manager : MonoBehaviour {
 		for (int i = 0; i < alarmLights.Length; i++) {
 			alarmLights [i].SetActive (state);
 		}
+	}
+
+	void DimLights() {
+		float t = Mathf.InverseLerp (fuelThreshold/2.0f, 0, fuel);
+		float intensity = Mathf.Lerp (lightIntensityThresholds.x, lightIntensityThresholds.y, t);
 
 		for (int i = 0; i < normalLights.Length; i++) {
-			normalLights [i].SetActive (!state);
+			normalLights [i].intensity = intensity;	
+		}
+	}
+
+	void SetLightColour(Color newColor) {
+		for (int i = 0; i < normalLights.Length; i++) {
+			normalLights [i].color = newColor;	
 		}
 	}
 }

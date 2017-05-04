@@ -4,20 +4,32 @@ using UnityEngine;
 
 public class EngineSound : MonoBehaviour {
 
-	public AudioClip idle;
-	public AudioClip driving;
-	public AudioClip startIdle;
-	public AudioClip startUp;
+//	public AudioClip idle;
+//	public AudioClip driving;
+//	public AudioClip startIdle;
+//	public AudioClip startUp;
 
 	AudioSource audioSource;
 	bool transitioned = false;
 	float originalVolume = 0.0f;
+
+	public Vector2 pitchThreshold = new Vector2();
 
 	// Use this for initialization
 	void Start () {
 		audioSource = GetComponent<AudioSource> ();
 		originalVolume = audioSource.volume;
 	}
+
+	public void SetPitch(float speed) {
+		audioSource.pitch = Mathf.Lerp (pitchThreshold.x, pitchThreshold.y, Mathf.Abs (speed));
+	}
+
+	public void SetVolume(float percent) {
+		audioSource.volume = originalVolume * percent;
+	}
+
+
 	
 //	void Update() {
 //		if (Input.GetKeyDown (KeyCode.Alpha1)) {
@@ -33,40 +45,38 @@ public class EngineSound : MonoBehaviour {
 //		}
 //	}
 
-	public void TransitionToDriving() {
-		if (!audioSource.clip.Equals (driving) && !transitioned) {
-			StopCoroutine (TransitionClip ());
-			PlayClip (driving);
-			StartCoroutine (Transitioned ());
-//			StartCoroutine (TransitionClip ());
-		}
-	}
-	public void TransitionToIdle() {
-		if (!audioSource.clip.Equals (idle) && !transitioned) {
-			StopCoroutine (TransitionClip ());
-			PlayClip (idle);
-			StartCoroutine (Transitioned ());
-		}
-	}
+//	public void TransitionToDriving() {
+//		if (!audioSource.clip.Equals (driving) && !transitioned) {
+//			StopCoroutine (TransitionClip ());
+//			PlayClip (driving);
+//			StartCoroutine (Transitioned ());
+////			StartCoroutine (TransitionClip ());
+//		}
+//	}
+//	public void TransitionToIdle() {
+//		if (!audioSource.clip.Equals (idle) && !transitioned) {
+//			StopCoroutine (TransitionClip ());
+//			PlayClip (idle);
+//			StartCoroutine (Transitioned ());
+//		}
+//	}
 
-	public void SetVolume(float percent) {
-		audioSource.volume = originalVolume * percent;
-	}
 
-	void PlayClip(AudioClip clip) {
-		audioSource.clip = clip;
-		audioSource.Play ();
-	}
 
-	IEnumerator TransitionClip() {
-		yield return new WaitForSeconds (startUp.length);
-		audioSource.clip = driving;
-		audioSource.Play ();
-	}
-
-	IEnumerator Transitioned() {
-		transitioned = true;
-		yield return new WaitForSeconds (0.5f);
-		transitioned = false;
-	}
+//	void PlayClip(AudioClip clip) {
+//		audioSource.clip = clip;
+//		audioSource.Play ();
+//	}
+//
+//	IEnumerator TransitionClip() {
+//		yield return new WaitForSeconds (startUp.length);
+//		audioSource.clip = driving;
+//		audioSource.Play ();
+//	}
+//
+//	IEnumerator Transitioned() {
+//		transitioned = true;
+//		yield return new WaitForSeconds (0.5f);
+//		transitioned = false;
+//	}
 }
