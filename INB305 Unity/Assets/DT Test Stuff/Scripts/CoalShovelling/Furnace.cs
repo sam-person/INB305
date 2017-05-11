@@ -16,7 +16,14 @@ public class Furnace : MonoBehaviour {
 	[Range(0,8)]
 	public float maxLight;
 
+	// Audio
+	AudioSource[] audioSources;
+
 	public FakeTank_Manager tankManager;
+
+	void Start() {
+		audioSources = GetComponents<AudioSource> ();
+	}
 
 	void Update() {
 //		burnAmount = burnRate * Time.deltaTime;
@@ -32,15 +39,22 @@ public class Furnace : MonoBehaviour {
 //			fuelAmount -= maxBurnRate * Time.deltaTime;
 //
 //		fuelAmount = Mathf.Clamp (fuelAmount - burnAmount, 0f, 1000f);
-		updateLight();
+		UpdateLight();
+		FurnaceAmbience ();
 	}
+
 
 	public void AcceptFuel(float amount) {
 		tankManager.fuel = Mathf.Clamp (tankManager.fuel + amount / 100f, 0f, 1f);
 		fuelAmount = Mathf.Clamp (fuelAmount + amount, 0f, 1000f);
 	}
 
-	void updateLight(){
+	void UpdateLight(){
 		furnaceLight.intensity = Mathf.Lerp (0, maxLight, tankManager.fuel);
+	}
+
+	void FurnaceAmbience() {
+		audioSources [0].volume = tankManager.fuel / 8f + 0.05f; // Ambience
+		audioSources [1].volume = tankManager.fuel / 14f + 0.05f; // fire crackling
 	}
 }

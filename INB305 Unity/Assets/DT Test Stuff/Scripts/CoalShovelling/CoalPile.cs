@@ -11,10 +11,20 @@ public class CoalPile : MonoBehaviour {
 	float giveAmount = 0.0f;
 	float magnitude = 0.0f;
 
+	// Angle Calculations
 	Vector3 vel = new Vector3();
 	Vector3 projection = new Vector3();
 	Vector3 otherPos = new Vector3();
 	float angle = 0.0f;
+
+	// Audio
+	AudioSource coalAudio;
+	public AudioSource shovelTipAudioSource;
+	public AudioClip shovelHitCoalSound;
+
+	void Start() {
+		coalAudio = GetComponent<AudioSource> ();
+	}
 
 	void Update() {
 		Debug.DrawLine (projection + this.transform.position, this.transform.position, Color.blue);
@@ -52,11 +62,31 @@ public class CoalPile : MonoBehaviour {
 					if (magnitude > minVelocty) {
 						shovelScript.coalAmount = giveAmount;
 						shovelScript.LoseCoal (0f);
+
+						PlayAudioSounds ();
 					}
 				}
+
 			} else {
 				Debug.Log ("Unacceptable angle: " + angle);
 			}
+		}
+	}
+
+	int index = 0;
+
+	void PlayAudioSounds() {
+		if (!shovelTipAudioSource.isPlaying) {
+			shovelTipAudioSource.pitch = 1 + Random.Range (-0.05f, 0.05f);
+			shovelTipAudioSource.volume = 1f * magnitude / 10f;
+			shovelTipAudioSource.clip = shovelHitCoalSound;
+			shovelTipAudioSource.Play ();
+		}
+
+		if (!coalAudio.isPlaying) {
+			coalAudio.pitch = 1f + Random.Range (-0.1f, 0.1f);
+			coalAudio.volume = 1f * magnitude / 30f;
+			coalAudio.Play ();
 		}
 	}
 }

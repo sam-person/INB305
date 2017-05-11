@@ -28,8 +28,14 @@ public class Shovel : MonoBehaviour {
 	public Transform shovelTip;
 	public Furnace furnaceScript;
 
+	// Audio
+	AudioSource audioSource;
+	public AudioSource shovelTipAudioSource;
+	public AudioClip fireWhooshSound;
+
 	void Start() {
 		next = this.transform.position;
+		audioSource = GetComponent<AudioSource> ();
 	}
 
 	void Update() {
@@ -91,6 +97,10 @@ public class Shovel : MonoBehaviour {
 			isUpsideDown = true;
 			if (shovelTipScript.isInFurnace && coalAmount > 0) {
 				furnaceScript.AcceptFuel (coalAmount);
+				shovelTipAudioSource.volume = coalAmount / 40f;
+				shovelTipAudioSource.pitch = 1 + Random.Range (-0.1f, 0.1f);
+				shovelTipAudioSource.clip = fireWhooshSound;
+				shovelTipAudioSource.Play ();
 			}
 			LoseCoal (maxAmount);
 		} else {
@@ -103,5 +113,12 @@ public class Shovel : MonoBehaviour {
 //		Debug.Log ("Losing coal: " + amount);
 		coalAmount = Mathf.Clamp (coalAmount - amount, 0f, maxAmount);
 		coalShovelScript.SetScale (coalAmount / maxAmount);
+	}
+
+	void OnCollisionEnter(Collision col) {
+		if (!audioSource.isPlaying && col.gameObject.CompareTag ("Floor")) {
+			audioSource.pitch = 1.5f + Random.Range (-0.1f, 0.1f);
+			audioSource.Play ();
+		}
 	}
 }

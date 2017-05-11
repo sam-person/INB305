@@ -10,6 +10,7 @@ TagManager:
   - Coal
   - Shovel
   - Furnace
+  - Floor
   layers:
   - Default
   - TransparentFX

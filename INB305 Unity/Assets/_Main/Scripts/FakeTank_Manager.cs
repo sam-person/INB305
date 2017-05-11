@@ -59,7 +59,7 @@ public class FakeTank_Manager : MonoBehaviour {
 
 		engineSound.SetPitch (speed);
 
-		engineSound.SetVolume (fuel + 0.5f);
+		engineSound.SetVolume (fuel /1.5f + 0.1f);
 	}
 
 	void CheckLowFuel() {
