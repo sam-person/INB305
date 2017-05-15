@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Furnace : MonoBehaviour {
 
+	// Fueling
 	public float fuelAmount = 0.0f;
 	public float fuelUpRate = 2.0f;
 	public float fuelMax = 100f;
@@ -19,10 +20,18 @@ public class Furnace : MonoBehaviour {
 	// Audio
 	AudioSource[] audioSources;
 
+	// Particles
+	public ParticleSystem fireParticles;
+	Vector2 fireParticleBounds = new Vector2();
+	public ParticleSystem smokeParticles;
+	public ParticleSystem embersParticles;
+
+	// Reference
 	public FakeTank_Manager tankManager;
 
 	void Start() {
 		audioSources = GetComponents<AudioSource> ();
+		fireParticleBounds = fireParticles.shape.box;
 	}
 
 	void Update() {
@@ -56,5 +65,17 @@ public class Furnace : MonoBehaviour {
 	void FurnaceAmbience() {
 		audioSources [0].volume = tankManager.fuel / 8f + 0.05f; // Ambience
 		audioSources [1].volume = tankManager.fuel / 14f + 0.05f; // fire crackling
+	}
+
+	void ScaleFireParticles() {
+
+	}
+
+	void ScaleSmokeParticles() {
+
+	}
+
+	void ScaleEmbersParticles() {
+
 	}
 }
