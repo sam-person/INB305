@@ -11,14 +11,14 @@ public class AlarmSound : MonoBehaviour {
 	float originalIntensity = 1f;
 	bool blinking = false;
 	float blinkTime = 0.2f; //0.632f
-	float originalVolume = 0f;
+//	float originalVolume = 0f;
 
 	// Use this for initialization
 	void Start () {
 		source = GetComponent<AudioSource> ();
 		fuelLight = fuelLightObject.GetComponent<Light> ();
 		originalIntensity = fuelLight.intensity;
-		originalVolume = source.volume;
+//		originalVolume = source.volume;
 	}
 	
 	// Update is called once per frame

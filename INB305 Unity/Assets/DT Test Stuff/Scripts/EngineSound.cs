@@ -10,7 +10,7 @@ public class EngineSound : MonoBehaviour {
 //	public AudioClip startUp;
 
 	AudioSource audioSource;
-	bool transitioned = false;
+//	bool transitioned = false;
 	float originalVolume = 0.0f;
 
 	public Vector2 pitchThreshold = new Vector2();

@@ -60,17 +60,17 @@ public class Shovel : MonoBehaviour {
 //		Debug.Log ("shovel script calc vel: " + velocity);
 	}
 
-	void CheckXZAngle() {
-
-		if (Xmin.x > this.transform.eulerAngles.x && this.transform.eulerAngles.x > Xmin.y) {
-			LossCalculation (this.transform.eulerAngles.x, Xmax);
-		} else if (Zmin.x > this.transform.eulerAngles.z && this.transform.eulerAngles.z > Zmin.y) {
-			LossCalculation (this.transform.eulerAngles.z, Zmax);
-		} else {
-			isTipping = false;
-		}
-
-	}
+//	void CheckXZAngle() {
+//
+//		if (Xmin.x > this.transform.eulerAngles.x && this.transform.eulerAngles.x > Xmin.y) {
+//			LossCalculation (this.transform.eulerAngles.x, Xmax);
+//		} else if (Zmin.x > this.transform.eulerAngles.z && this.transform.eulerAngles.z > Zmin.y) {
+//			LossCalculation (this.transform.eulerAngles.z, Zmax);
+//		} else {
+//			isTipping = false;
+//		}
+//
+//	}
 
 	void LossCalculation(float angle, Vector2 max) {
 		float lossAmount = 0.0f;

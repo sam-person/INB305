@@ -5,8 +5,8 @@ using UnityEngine;
 public class Crank : MonoBehaviour {
 
 	public GameObject crankLever;
-	Collider crankCollider;
-	float crankColliderSizeX;
+//	Collider crankCollider;
+//	float crankColliderSizeX;
 	public GameObject vehicle;
 
 	Vector3 relativeInitialInteractPoint = new Vector3();
@@ -14,8 +14,8 @@ public class Crank : MonoBehaviour {
 	Vector3 rightOfInteractPoint = new Vector3();
 
 	void Start() {
-		crankCollider = crankLever.GetComponent<Collider> ();
-		crankColliderSizeX = crankCollider.bounds.extents.x * 2;
+//		crankCollider = crankLever.GetComponent<Collider> ();
+//		crankColliderSizeX = crankCollider.bounds.extents.x * 2;
 	}
 
 	void Update() {

@@ -73,8 +73,6 @@ public class CoalPile : MonoBehaviour {
 		}
 	}
 
-	int index = 0;
-
 	void PlayAudioSounds() {
 		if (!shovelTipAudioSource.isPlaying) {
 			shovelTipAudioSource.pitch = 1 + Random.Range (-0.05f, 0.05f);
