@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class ShovelTip : MonoBehaviour {
 
+	// Used to determine if the shovel tip is in a trigger collider
+
+	// If the shovel tip is IN coal
 	public bool isInCoal = false;
+	// If the shovel tip is IN furnace
 	public bool isInFurnace = false;
 
 	void OnTriggerStay(Collider other) {

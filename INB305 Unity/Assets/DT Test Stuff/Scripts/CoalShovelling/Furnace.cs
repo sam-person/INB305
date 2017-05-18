@@ -6,11 +6,6 @@ public class Furnace : MonoBehaviour {
 
 	// Fueling
 	public float fuelAmount = 0.0f;
-//	public float fuelUpRate = 2.0f;
-//	public float fuelMax = 100f;
-//	public float burnRate = 1.0f;
-//	float burnAmount = 0.0f;
-//	float maxBurnRate = 5f;
 
 	// Light
 	public Light furnaceLight;
@@ -20,11 +15,11 @@ public class Furnace : MonoBehaviour {
 	// Audio
 	AudioSource[] audioSources;
 
-	// Particles
+	// Particles Systems, module references & setting bounds
 	public ParticleSystem fireParticles;
 	Vector3 originalFireParticleBounds = new Vector3();
 	ParticleSystem.ShapeModule fireShapeModule;
-	Vector2 fireBoundsScale = new Vector2 (0.4f, 1f); // scale factor for the min and max bounds size respectively
+	Vector2 fireBoundsScale = new Vector2 (0.2f, 1f); // scale factor for the min and max bounds size respectively
 	ParticleSystem.MainModule fireMainModule;
 	Vector2 fireStartSize = new Vector2(0.2f, 1f); // range for start size (min, original)
 	ParticleSystem.EmissionModule fireEmissionModule;
@@ -54,7 +49,6 @@ public class Furnace : MonoBehaviour {
 		fireMainModule = fireParticles.main; // Start Size
 		fireStartSize.y = fireParticles.main.startSize.constant;
 
-
 		fireEmissionModule = fireParticles.emission; // Emission Rate
 		fireEmissions.y = fireParticles.emission.rateOverTime.constant;
 		fireEmissions.x = Mathf.Floor(fireEmissions.y * 0.3f);
@@ -73,21 +67,8 @@ public class Furnace : MonoBehaviour {
 	}
 
 	void Update() {
-//		burnAmount = burnRate * Time.deltaTime;
-//		if (fuelAmount - burnAmount >= 0) {
-//			tankManager.fuel += fuelUpRate * Time.deltaTime / 100f;
-//		} else {
-//			if (fuelAmount > 0) {
-//				tankManager.fuel += (burnAmount - fuelAmount) * Time.deltaTime / 100f;
-//			}
-//		}
-//		tankManager.fuel = Mathf.Clamp (tankManager.fuel, 0f, 1f);
-//		if (tankManager.fuel >= 1)
-//			fuelAmount -= maxBurnRate * Time.deltaTime;
-//
-//		fuelAmount = Mathf.Clamp (fuelAmount - burnAmount, 0f, 1000f);
-		UpdateLight ();
-		FurnaceAmbience ();
+		UpdateLight (); // Update overall furnace light
+		FurnaceAmbience (); // Update ambient furnace sounds
 
 		// Particle updates
 		ScaleFireParticles ();
@@ -95,21 +76,27 @@ public class Furnace : MonoBehaviour {
 		ScaleEmbersParticles ();
 	}
 
-
+	/// <summary>
+	/// Add fuel to the furnace in FakeTank Manager
+	/// </summary>
+	/// <param name="amount">The amount of fuel to give.</param>
 	public void AcceptFuel(float amount) {
 		tankManager.fuel = Mathf.Clamp (tankManager.fuel + amount / 100f, 0f, 1f);
 		fuelAmount = Mathf.Clamp (fuelAmount + amount, 0f, 1000f);
 	}
 
+	// Lerp the light based on fuel
 	void UpdateLight(){
 		furnaceLight.intensity = Mathf.Lerp (0.5f, maxLight, tankManager.fuel);
 	}
 
+	// Scale the volume of the audio sources based on fuel
 	void FurnaceAmbience() {
 		audioSources [0].volume = tankManager.fuel / 8f + 0.05f; // Ambience
 		audioSources [1].volume = tankManager.fuel / 14f + 0.05f; // fire crackling
 	}
 
+	// Scales the box bounds, start size and emission rate of the Fire Particles based on fuel
 	void ScaleFireParticles() {
 		// bounds size
 		float lerpValue = 0f;
@@ -124,6 +111,7 @@ public class Furnace : MonoBehaviour {
 
 	}
 
+	// Scales the start lifetime, start size and emission rate of the Smoke Particles based on fuel
 	void ScaleSmokeParticles() {
 		// start lifetime
 		smokeMainModule.startLifetime = LerpBasedOnFuel(smokeStartLifeTime);
@@ -135,12 +123,14 @@ public class Furnace : MonoBehaviour {
 		smokeEmissionModule.rateOverTime = LerpBasedOnFuel(smokeEmissions);
 	}
 
+	// Scales the emission rate of the Ember Particles based on fuel
 	void ScaleEmbersParticles() {
 		// emission
 		emberEmissionModule.rateOverTime = LerpBasedOnFuel(emberEmissions);
 
 	}
 
+	// Lerps between the give bounds based on fuel | (x, y) = (lower, upper)
 	float LerpBasedOnFuel(Vector2 ranges) {
 		return Mathf.Lerp(ranges.x, ranges.y, tankManager.fuel);
 	}

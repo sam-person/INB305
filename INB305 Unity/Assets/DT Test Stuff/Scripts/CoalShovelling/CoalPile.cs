@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CoalPile : MonoBehaviour {
 
+	// Stats
 	public Shovel shovelScript;
 	public float maxAngle = 75f;
 	public float giveMultiplier = 5f;
@@ -25,41 +26,39 @@ public class CoalPile : MonoBehaviour {
 		coalAudio = GetComponent<AudioSource> ();
 	}
 
-	void Update() {
-		Debug.DrawLine (projection + this.transform.position, this.transform.position, Color.blue);
-		Debug.DrawLine (otherPos + this.transform.position, this.transform.position, Color.red);
-		Debug.DrawLine (vel.normalized + this.transform.position, this.transform.position, Color.green);
-		
-//		Debug.DrawRay (otherPos, vel, Color.green);
-	}
+//	void Update() {
+//		// Debugging
+//		Debug.DrawLine (projection + this.transform.position, this.transform.position, Color.blue);
+//		Debug.DrawLine (otherPos + this.transform.position, this.transform.position, Color.red);
+//		Debug.DrawLine (vel.normalized + this.transform.position, this.transform.position, Color.green);
+//	}
 
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Shovel")) {
-			// Convert to local
-//			Debug.Log("rotation: " + Vector3.Angle(other.transform.rotation.eulerAngles, Vector3.up));
-//			Rigidbody attach = other.transform.parent.GetComponent<Rigidbody> ();
-//			if (attach) {
-//				Debug.Log ("attached: " + attach.velocity);
-//			}
-
+			// Store and convert shovel coordinate at impact
 			otherPos = this.transform.InverseTransformPoint (other.transform.position);
-//			Debug.Log ("rel shovel pos: " + otherPos);
+
+			// Store the velocity of the shovel at impact
 			vel = shovelScript.velocity;
-//			Debug.Log ("vel: " + vel);
+
+			// project the local shovel coordinate at impact to local XZ plane
 			projection = new Vector3 (-otherPos.x, 0f, -otherPos.z);
-//			Debug.Log ("rel projection: " + projection);
+
+			// Calculate angle between the projection and velocity of shovel at impact
 			angle = Vector3.Angle (projection.normalized, vel.normalized);
-//			Debug.Log ("Shovel angle: " + angle);
 
 			// Check if entry angle is greater than max
 			if (angle <= maxAngle) {
+				
 				// Check if shovel is upsidedown
 				if (!shovelScript.isUpsideDown) {
-					magnitude = vel.magnitude * giveMultiplier;
-//					Debug.Log ("initial vel: " + vel.magnitude + " with multiplier " + giveMultiplier + ": " + magnitude);
+					magnitude = vel.magnitude * giveMultiplier; // scale the magnitude
+
+					// Check if magnitude is greater than velocity
 					if (magnitude > minVelocty) {
+						// Successfully got some coal
 						shovelScript.coalAmount = shovelScript.maxAmount;
-						shovelScript.LoseCoal (0f);
+						shovelScript.LoseCoal (0f); // This is for resetting the scaled object on the shovel to show
 
 						PlayAudioSounds ();
 					}
@@ -71,17 +70,19 @@ public class CoalPile : MonoBehaviour {
 		}
 	}
 
+	// Play shoveling sound when shoveling
 	void PlayAudioSounds() {
+		// Check if audio source is playing (so sound doesn't cut off)
 		if (!shovelTipAudioSource.isPlaying) {
-			shovelTipAudioSource.pitch = 1 + Random.Range (-0.05f, 0.05f);
-			shovelTipAudioSource.volume = 1f * magnitude / 10f;
-			shovelTipAudioSource.clip = shovelHitCoalSound;
+			shovelTipAudioSource.pitch = 1 + Random.Range (-0.05f, 0.05f); // Randomise pitch
+			shovelTipAudioSource.volume = 1f * magnitude / 10f; // Scale volume
+			shovelTipAudioSource.clip = shovelHitCoalSound; // Set clip
 			shovelTipAudioSource.Play ();
 		}
 
 		if (!coalAudio.isPlaying) {
-			coalAudio.pitch = 1f + Random.Range (-0.1f, 0.1f);
-			coalAudio.volume = 1f * magnitude / 30f;
+			coalAudio.pitch = 1f + Random.Range (-0.1f, 0.1f); // Randomise pitch
+			coalAudio.volume = 1f * magnitude / 30f; // Scale volume
 			coalAudio.Play ();
 		}
 	}

@@ -8,43 +8,46 @@ public class AlarmSound : MonoBehaviour {
 	public GameObject fuelLightObject;
 	Light fuelLight;
 
+	// Blinking light
 	float originalIntensity = 1f;
 	bool blinking = false;
-	float blinkTime = 0.2f; //0.632f
-//	float originalVolume = 0f;
+	float blinkTime = 0.2f; // how fast the light blinkns
 
 	// Use this for initialization
 	void Start () {
 		source = GetComponent<AudioSource> ();
 		fuelLight = fuelLightObject.GetComponent<Light> ();
+
+		// Store intial value
 		originalIntensity = fuelLight.intensity;
-//		originalVolume = source.volume;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetKeyDown (KeyCode.Alpha1))
-			source.Play ();
 	}
 
+	// Sets volume of the audio source
 	public void SetVolume(float volume = 1f) {
 		source.volume = volume;
 	}
 
+	// Checks if the audio source is playing
 	public bool IsPlaying {
 		get { return source.isPlaying; }
 	}
 
+	// Settings to start the alarm
 	public void StartAlarm() {
 		source.Play ();
+
+		// Turn on fuel light
 		fuelLightObject.SetActive (true);
 		fuelLight.intensity = originalIntensity;
+
+		// Blink light if it is not on
 		if (!blinking) {
 			blinking = true;
 			StartCoroutine (BlinkLight ());
 		}
 	}
 
+	// Settings to stop the alarm
 	public void StopAlarm() {
 		source.Stop ();
 		fuelLightObject.SetActive (false);
@@ -52,9 +55,10 @@ public class AlarmSound : MonoBehaviour {
 		StopCoroutine (BlinkLight ());
 	}
 
+	// Blink the light repeatedly
 	IEnumerator BlinkLight() {
 		yield return new WaitForSeconds (blinkTime);
-		Debug.Log ("Started Blinking");
+
 		while (blinking) {
 			fuelLight.intensity = originalIntensity * 0.1f;
 			yield return new WaitForSeconds (blinkTime - 0.03f);

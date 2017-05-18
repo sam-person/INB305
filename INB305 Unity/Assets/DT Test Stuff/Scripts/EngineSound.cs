@@ -4,79 +4,30 @@ using UnityEngine;
 
 public class EngineSound : MonoBehaviour {
 
-//	public AudioClip idle;
-//	public AudioClip driving;
-//	public AudioClip startIdle;
-//	public AudioClip startUp;
+	// Controller for the Engine audio
 
 	AudioSource audioSource;
-//	bool transitioned = false;
-	float originalVolume = 0.0f;
 
+	float originalVolume = 0.0f;
+	// Thresholds for pitch
 	public Vector2 pitchThreshold = new Vector2();
 
 	// Use this for initialization
 	void Start () {
 		audioSource = GetComponent<AudioSource> ();
+
+		// Store initial volume
 		originalVolume = audioSource.volume;
 	}
 
+	// Sets the pitch of this audio source
 	public void SetPitch(float speed) {
+		// Lerps pitch based on given speed between the pitch thresholds
 		audioSource.pitch = Mathf.Lerp (pitchThreshold.x, pitchThreshold.y, Mathf.Abs (speed));
 	}
 
+	// Sets the volume of this audio source given the percent
 	public void SetVolume(float percent) {
 		audioSource.volume = originalVolume * percent;
 	}
-
-
-	
-//	void Update() {
-//		if (Input.GetKeyDown (KeyCode.Alpha1)) {
-//			TransitionToIdle ();
-//		} else if (Input.GetKeyDown (KeyCode.Alpha2)) {
-//			TransitionToDriving ();
-//		} else if (Input.GetKeyDown (KeyCode.Alpha3)) {
-//			audioSource.clip = startIdle;
-//			audioSource.Play ();
-//		} else if (Input.GetKeyDown (KeyCode.Alpha4)) {
-//			audioSource.clip = startUp;
-//			audioSource.Play ();
-//		}
-//	}
-
-//	public void TransitionToDriving() {
-//		if (!audioSource.clip.Equals (driving) && !transitioned) {
-//			StopCoroutine (TransitionClip ());
-//			PlayClip (driving);
-//			StartCoroutine (Transitioned ());
-////			StartCoroutine (TransitionClip ());
-//		}
-//	}
-//	public void TransitionToIdle() {
-//		if (!audioSource.clip.Equals (idle) && !transitioned) {
-//			StopCoroutine (TransitionClip ());
-//			PlayClip (idle);
-//			StartCoroutine (Transitioned ());
-//		}
-//	}
-
-
-
-//	void PlayClip(AudioClip clip) {
-//		audioSource.clip = clip;
-//		audioSource.Play ();
-//	}
-//
-//	IEnumerator TransitionClip() {
-//		yield return new WaitForSeconds (startUp.length);
-//		audioSource.clip = driving;
-//		audioSource.Play ();
-//	}
-//
-//	IEnumerator Transitioned() {
-//		transitioned = true;
-//		yield return new WaitForSeconds (0.5f);
-//		transitioned = false;
-//	}
 }

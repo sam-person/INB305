@@ -4,37 +4,36 @@ using UnityEngine;
 
 public class CoalOnShovel : MonoBehaviour {
 
-//	BoxCollider boxCollider;
+	// The representation of coal that is scooped up by the shovel.
+	// Scaling this game object shows the amount of coal collected
+
+	// Scale of coal on shovel
 	Vector3 maxScale = new Vector3();
 	Vector3 currentScale = new Vector3();
 
-//	public GameObject shovelCoal;
+	// References
 	public MeshRenderer shovelCoalRenderer;
-//	Color originalColor;
 
 	// Use this for initialization
 	void Start () {
-//		boxCollider = GetComponent<BoxCollider> ();
 		maxScale = transform.localScale;
 		currentScale = maxScale;
 
-//		meshRenderer = shovelCoal.GetComponent<MeshRenderer> ();
-//		Debug.Log (meshRenderer);
-//		originalColor = meshRenderer.material.color;
-
+		// 
 		SetScale (0f);
 	}
-	
+
+	// Sets the Y scale of this object and turns the renderer off or on based on scale
 	public void SetScale(float scale) {
-		currentScale.y = scale;
-		this.transform.localScale = currentScale;
+		currentScale.y = scale; // Store new scale
+
+		this.transform.localScale = currentScale; // Set scale
+
+		// Check if scale is less than an arbitrary value
 		if (currentScale.y < 0.02f) {
-//			originalColor.a = 0f;
-			shovelCoalRenderer.enabled = false;
+			shovelCoalRenderer.enabled = false; // turn off
 		} else {
-//			originalColor.a = 1f;
-			shovelCoalRenderer.enabled = true;
+			shovelCoalRenderer.enabled = true; // turn on
 		}
-//		meshRenderer.material.color = originalColor;
 	}
 }
