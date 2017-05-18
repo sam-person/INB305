@@ -22,11 +22,11 @@ public class Furnace : MonoBehaviour {
 
 	// Particles
 	public ParticleSystem fireParticles;
-	public Vector3 originalFireParticleBounds = new Vector3();
+	Vector3 originalFireParticleBounds = new Vector3();
 	ParticleSystem.ShapeModule fireShapeModule;
 	Vector2 fireBoundsScale = new Vector2 (0.4f, 1f); // scale factor for the min and max bounds size respectively
 	ParticleSystem.MainModule fireMainModule;
-	Vector2 fireStartSize = new Vector2(0.7f, 1f); // range for start size (min, original)
+	Vector2 fireStartSize = new Vector2(0.2f, 1f); // range for start size (min, original)
 	ParticleSystem.EmissionModule fireEmissionModule;
 	Vector2 fireEmissions = new Vector2(3f, 10f);
 
@@ -52,7 +52,8 @@ public class Furnace : MonoBehaviour {
 		originalFireParticleBounds = fireParticles.shape.box;
 
 		fireMainModule = fireParticles.main; // Start Size
-		fireStartSize.x = fireParticles.main.startSize.constant;
+		fireStartSize.y = fireParticles.main.startSize.constant;
+
 
 		fireEmissionModule = fireParticles.emission; // Emission Rate
 		fireEmissions.y = fireParticles.emission.rateOverTime.constant;
@@ -101,7 +102,7 @@ public class Furnace : MonoBehaviour {
 	}
 
 	void UpdateLight(){
-		furnaceLight.intensity = Mathf.Lerp (0, maxLight, tankManager.fuel);
+		furnaceLight.intensity = Mathf.Lerp (0.5f, maxLight, tankManager.fuel);
 	}
 
 	void FurnaceAmbience() {

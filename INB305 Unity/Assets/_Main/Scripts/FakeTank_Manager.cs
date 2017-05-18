@@ -81,7 +81,6 @@ public class FakeTank_Manager : MonoBehaviour {
 				if (fuel <= 0 && !normalLights [0].color.Equals (dimmedRedLightColor)) {
 					SetLightColour (dimmedRedLightColor);
 					alarmSound.SetVolume ();
-
 				}
 
 				if (fuel > 0 && !normalLights [0].color.Equals (originalLightColor)) {
@@ -94,6 +93,13 @@ public class FakeTank_Manager : MonoBehaviour {
 		} else {
 			if (alarmSound.IsPlaying)
 				alarmSound.StopAlarm ();
+			
+			if (!alarmLights [0].activeSelf)
+				ToggleAlarmLights (false);
+
+			if (fuel > 0 && !normalLights [0].color.Equals (originalLightColor)) {
+				SetLightColour (originalLightColor);
+			}
 		}
 
 //		if (!lowFuel && fuel <= lowFuelThreshold) {

@@ -8,7 +8,6 @@ public class CoalPile : MonoBehaviour {
 	public float maxAngle = 75f;
 	public float giveMultiplier = 5f;
 	public float minVelocty = 1.5f;
-	float giveAmount = 0.0f;
 	float magnitude = 0.0f;
 
 	// Angle Calculations
@@ -58,9 +57,8 @@ public class CoalPile : MonoBehaviour {
 				if (!shovelScript.isUpsideDown) {
 					magnitude = vel.magnitude * giveMultiplier;
 //					Debug.Log ("initial vel: " + vel.magnitude + " with multiplier " + giveMultiplier + ": " + magnitude);
-					giveAmount = Mathf.Clamp (magnitude, 0, shovelScript.maxAmount);
 					if (magnitude > minVelocty) {
-						shovelScript.coalAmount = giveAmount;
+						shovelScript.coalAmount = shovelScript.maxAmount;
 						shovelScript.LoseCoal (0f);
 
 						PlayAudioSounds ();

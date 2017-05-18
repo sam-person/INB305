@@ -92,12 +92,14 @@ public class Shovel : MonoBehaviour {
 		LoseCoal (lossAmount);
 	}
 
+
+	// CHASING VALUE WITH FUEL
 	void CheckUpAngle() {
 		if (Vector3.Angle (this.transform.up, Vector3.up) > 90f) {
 			isUpsideDown = true;
 			if (shovelTipScript.isInFurnace && coalAmount > 0) {
 				furnaceScript.AcceptFuel (coalAmount);
-				shovelTipAudioSource.volume = coalAmount / 40f;
+				shovelTipAudioSource.volume = coalAmount / 5f;
 				shovelTipAudioSource.pitch = 1 + Random.Range (-0.1f, 0.1f);
 				shovelTipAudioSource.clip = fireWhooshSound;
 				shovelTipAudioSource.Play ();
