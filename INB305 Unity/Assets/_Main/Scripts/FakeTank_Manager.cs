@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class FakeTank_Manager : MonoBehaviour {
+	public bool useNetwork = false;
+
 	public float speed, rotation;
 	[Header("Settings")]
 	public VRTK.VRTK_SpringLever crank;
@@ -19,8 +21,8 @@ public class FakeTank_Manager : MonoBehaviour {
 	public EngineSound engineSound;
 
 	// Low Fuel Alarms
-	bool lowFuel = false;
-	float lowFuelThreshold = 0.1f;
+	//bool lowFuel = false;
+	//float lowFuelThreshold = 0.1f;
 
 		// Lights for low fuel
 	public Light[] normalLights;
@@ -31,11 +33,14 @@ public class FakeTank_Manager : MonoBehaviour {
 	Color originalLightColor;
 	public Vector2 lightIntensityThresholds = new Vector2();
 
+	Tank_Network net;
+
 	// Use this for initialization
 	void Start () {
 		// Store initial values
 		originalLightColor = normalLights [0].color;
 		originalLightIntensity = normalLights [0].intensity;
+		net = GetComponent<Tank_Network> ();
 	}
 	
 	// Update is called once per frame
@@ -48,7 +53,7 @@ public class FakeTank_Manager : MonoBehaviour {
 			underThresholdClamp = Mathf.Max(minimumSpeed, Mathf.InverseLerp(0, fuelThreshold, fuel));
 			speed = Mathf.Clamp(speed, -underThresholdClamp, underThresholdClamp);
 		}
-		rotation = (wheel.GetNormalizedValue()/100.0f)-0.5f;
+		rotation = (wheel.GetNormalizedValue()/100.0f);
 		fuel = Mathf.Max(0,fuel-(fuelConsumption*Time.deltaTime*0.001f));
 
 		CheckLowFuel (); // Update low fuel alarms
@@ -57,6 +62,21 @@ public class FakeTank_Manager : MonoBehaviour {
 		fuelBar.fillAmount = fuel;
 		speedBar.fillAmount = speed;
 		reverseBar.fillAmount = -speed;
+	}
+
+	void FixedUpdate(){
+		if (!useNetwork) {
+			return;
+		}
+		float angle_ = Mathf.Lerp (0, 180, rotation);
+		Debug.Log ("Angle: " + angle_);
+
+		float speed_ = Mathf.Lerp (50, 60, Mathf.InverseLerp (-1, 1, speed));
+		Debug.Log ("Speed:" + speed_);
+
+		net.SendAngle (angle_);
+		net.SendSpeed (speed_);
+
 	}
 
 	// Change pitch and volume of Engine sound based on speed;

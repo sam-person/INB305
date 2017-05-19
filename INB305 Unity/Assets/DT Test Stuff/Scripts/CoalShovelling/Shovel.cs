@@ -12,10 +12,10 @@ public class Shovel : MonoBehaviour {
 	public bool isUpsideDown = false;
 	public bool isTipping = false;
 	float lossRate = 4f;
-	Vector2 Xmin = new Vector2 (320f, 40f);
-	Vector2 Xmax = new Vector2 (290f, 70f);
-	Vector2 Zmin = new Vector2 (335f, 25f);
-	Vector2 Zmax = new Vector2 (280f, 80f);
+	//Vector2 Xmin = new Vector2 (320f, 40f);
+	//Vector2 Xmax = new Vector2 (290f, 70f);
+	//Vector2 Zmin = new Vector2 (335f, 25f);
+	//Vector2 Zmax = new Vector2 (280f, 80f);
 
 	// Velocity
 	Vector3 prev = new Vector3();
@@ -33,9 +33,12 @@ public class Shovel : MonoBehaviour {
 	public AudioSource shovelTipAudioSource;
 	public AudioClip fireWhooshSound;
 
+	Vector3 startpos;
+
 	void Start() {
 		next = this.transform.position;
 		audioSource = GetComponent<AudioSource> ();
+		startpos = transform.position;
 	}
 
 	void Update() {
@@ -50,6 +53,8 @@ public class Shovel : MonoBehaviour {
 //		}
 
 		CheckUpAngle ();
+
+		CheckOutOfMap ();
 	}
 
 	void CalculateVelocity() {
@@ -99,7 +104,7 @@ public class Shovel : MonoBehaviour {
 			isUpsideDown = true;
 			if (shovelTipScript.isInFurnace && coalAmount > 0) {
 				furnaceScript.AcceptFuel (coalAmount);
-				shovelTipAudioSource.volume = coalAmount / 5f;
+				shovelTipAudioSource.volume = 1;
 				shovelTipAudioSource.pitch = 1 + Random.Range (-0.1f, 0.1f);
 				shovelTipAudioSource.clip = fireWhooshSound;
 				shovelTipAudioSource.Play ();
@@ -121,6 +126,13 @@ public class Shovel : MonoBehaviour {
 		if (!audioSource.isPlaying && col.gameObject.CompareTag ("Floor")) {
 			audioSource.pitch = 1.5f + Random.Range (-0.1f, 0.1f);
 			audioSource.Play ();
+		}
+	}
+
+	void CheckOutOfMap(){
+		if (transform.position.y < -5) {
+			transform.position = startpos;
+			GetComponent<Rigidbody> ().velocity = Vector3.zero;
 		}
 	}
 }
