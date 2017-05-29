@@ -4,14 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class FakeTank_Manager : MonoBehaviour {
-	public bool useNetwork = false;
 
-	public float speed, rotation;
+	public float crankL, crankR;
 	[Header("Settings")]
-	public VRTK.VRTK_SpringLever crank;
-	public VRTK.VRTK_Wheel wheel;
+	public VRTK.VRTK_SpringLever crankL_SpringLever, crankR_SpringLever;
 	public float minimumSpeed, fuelThreshold, fuelConsumption;
-	public Image fuelBar, speedBar, reverseBar;
+	public Image fuelBar, speedBarL, reverseBarL, speedBarR, reverseBarR;
 	[Header("Stats")]
 	[Range(0,1)]
 	public float fuel = 1;
@@ -45,43 +43,40 @@ public class FakeTank_Manager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		speed = (-(crank.GetNormalizedValue()/100.0f)+0.5f)*2.0f;
+		crankL = (-(crankL_SpringLever.GetNormalizedValue()/100.0f)+0.5f)*2.0f;
+		crankR = (-(crankR_SpringLever.GetNormalizedValue()/100.0f)+0.5f)*2.0f;
 
 		EngineAudio (); // Update Engine sounds
 
 		if(fuel < fuelThreshold){
 			underThresholdClamp = Mathf.Max(minimumSpeed, Mathf.InverseLerp(0, fuelThreshold, fuel));
-			speed = Mathf.Clamp(speed, -underThresholdClamp, underThresholdClamp);
+			crankL = Mathf.Clamp(crankL, -underThresholdClamp, underThresholdClamp);
+			crankR = Mathf.Clamp(crankR, -underThresholdClamp, underThresholdClamp);
 		}
-		rotation = (wheel.GetNormalizedValue()/100.0f);
 		fuel = Mathf.Max(0,fuel-(fuelConsumption*Time.deltaTime*0.001f));
 
 		CheckLowFuel (); // Update low fuel alarms
 
-		display.text = "Speed: " + (speed * 100.0f).ToString("F2") + "\nRotation: " + (rotation * 100.0f).ToString("F2") + "\nFuel: " + (fuel * 100.0f).ToString("F2");
+		display.text = "Left: " + (crankL * 100.0f).ToString("F2") + "\nRight: " + (crankR * 100.0f).ToString("F2") + "\nFuel: " + (fuel * 100.0f).ToString("F2");
 		fuelBar.fillAmount = fuel;
-		speedBar.fillAmount = speed;
-		reverseBar.fillAmount = -speed;
+		speedBarL.fillAmount = crankL;
+		reverseBarL.fillAmount = -crankL;
+		speedBarR.fillAmount = crankR;
+		reverseBarR.fillAmount = -crankR;
 	}
 
 	void FixedUpdate(){
-		if (!useNetwork) {
+		if (!net.useNetwork) {
 			return;
 		}
-		float angle_ = Mathf.Lerp (0, 180, rotation);
-		Debug.Log ("Angle: " + angle_);
 
-		float speed_ = Mathf.Lerp (50, 60, Mathf.InverseLerp (-1, 1, speed));
-		Debug.Log ("Speed:" + speed_);
-
-		net.SendAngle (angle_);
-		net.SendSpeed (speed_);
+		net.SendSpeed (crankL * 100f, crankR * 100f);
 
 	}
 
 	// Change pitch and volume of Engine sound based on speed;
 	void EngineAudio() {
-		engineSound.SetPitch (speed); // Pitch
+		engineSound.SetPitch (crankL + crankR /2.0f); // Pitch
 
 		engineSound.SetVolume (fuel /1.5f + 0.1f); // Volume
 	}

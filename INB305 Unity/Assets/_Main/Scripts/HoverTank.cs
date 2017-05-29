@@ -25,8 +25,8 @@ public class HoverTank : MonoBehaviour {
 			body.AddForce(appliedHoverForce, ForceMode.Acceleration);
 		}
 
-		float force = controller.speed * maxspeed;
-		body.AddRelativeForce(0, 0, force);
-		body.AddRelativeTorque(0, controller.rotation, 0);
+		//float force = controller.speed * maxspeed;
+		//body.AddRelativeForce(0, 0, force);
+		//body.AddRelativeTorque(0, controller.rotation, 0);
 	}
 }

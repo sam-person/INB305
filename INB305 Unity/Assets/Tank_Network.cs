@@ -6,37 +6,60 @@ using System.Net.Sockets;
 using System.Text;
 
 public class Tank_Network : MonoBehaviour {
+	public bool useNetwork = false;
+
 
 	public string ip;
 	public int port;
 
-	[Range(0,180)]
-	public float angle;
+	public string testPacket;
 
 	Socket sender;
 
 	// Use this for initialization
 	void Start () {
 		Connect (ip, port);
+
 	}
-	
+
+	// Left Forward 50: lf050
+	// Left Backward 70: lb070
+	// Right Forward 50: rf050
+	// Right Backward 99: rb099
+
+
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 			Debug.Log ("Left");
-			Send ("rd000");
+			Send ("lb050");
+			Send ("rf050");
 		}
 		if (Input.GetKeyDown (KeyCode.RightArrow)) {
 			Debug.Log ("Right");
-			Send ("rd180");
+			Send ("rb050");
+			Send ("lf050");
 		}
 		if (Input.GetKeyDown (KeyCode.UpArrow)) {
 			Debug.Log ("Forward");
-			Send ("rf060");
+			Send ("lf050");
+			Send ("rf050");
 		}
 		if (Input.GetKeyDown (KeyCode.DownArrow)) {
+			Debug.Log ("Back");
+			Send ("lb050");
+			Send ("rb050");
+		}
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			Debug.Log (testPacket);
+			Send (testPacket);
+		}
+		if (Input.GetKeyDown (KeyCode.Return)) {
+			Send ("lf000");
+			//Send ("lb000");
+			Send ("rf000");
+			//Send ("rb000");
 			Debug.Log ("Stop");
-			Send ("rf055");
 		}
 	}
 
@@ -53,19 +76,39 @@ public class Tank_Network : MonoBehaviour {
 		sender.Send (msg);
 	}
 
-	public void SendAngle(float angle){
-		string packet = "rd" + Mathf.RoundToInt (angle).ToString ("D3");
-		Send (packet);
-	}
+	public void SendSpeed(float speedL, float speedR){
+		if (speedL > 0) {
+			string packetL = "lf" + Mathf.RoundToInt (Mathf.Abs (speedL)).ToString ("D3");
+			Send (packetL);
+		} else {
+			string packetL = "lb" + Mathf.RoundToInt (Mathf.Abs (speedL)).ToString ("D3");
+			Send (packetL);
+		}
 
-	public void SendSpeed(float speed){
-		string packet = "rf" + Mathf.RoundToInt (speed).ToString ("D3");
-		Send (packet);
+		if (speedR > 0) {
+			string packetR = "rf" + Mathf.RoundToInt (Mathf.Abs (speedR)).ToString ("D3");
+			Send (packetR);
+		} else {
+			string packetR = "rb" + Mathf.RoundToInt (Mathf.Abs (speedR)).ToString ("D3");
+			Send (packetR);
+		}
+
 	}
 
 	void OnApplicationQuit(){
 		Debug.Log ("Closed network conection");
 		sender.Shutdown (SocketShutdown.Both);
 		sender.Close ();
+	}
+
+	void AllStop(){
+		Send ("af000");
+		Send ("bf000");
+		Send ("cf000");
+		Send ("df000");
+		Send ("ef000");
+
+
+		Debug.Log ("All Stop");
 	}
 }
