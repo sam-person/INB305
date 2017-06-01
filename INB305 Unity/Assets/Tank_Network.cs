@@ -18,8 +18,10 @@ public class Tank_Network : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		if (!useNetwork) {
+			return;
+		}
 		Connect (ip, port);
-
 	}
 
 	// Left Forward 50: lf050
@@ -96,6 +98,9 @@ public class Tank_Network : MonoBehaviour {
 	}
 
 	void OnApplicationQuit(){
+		if (!useNetwork) {
+			return;
+		}
 		Debug.Log ("Closed network conection");
 		sender.Shutdown (SocketShutdown.Both);
 		sender.Close ();
