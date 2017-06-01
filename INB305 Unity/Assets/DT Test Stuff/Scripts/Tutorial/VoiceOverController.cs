@@ -5,6 +5,7 @@ using UnityEngine;
 public class VoiceOverController : MonoBehaviour {
 
 	AudioSource audioSource;
+	float clipWaitBuffer = 1f;
 
 	public AudioClip[] voiceOverClips;
 
@@ -23,6 +24,11 @@ public class VoiceOverController : MonoBehaviour {
 		case 1:
 			PlayAudioClip (startVoiceOver);
 			break;
+		case 2:
+			PlayAudioClip (controlClips [0]);
+			break;
+		case 3:
+			break;
 		}
 	}
 
@@ -36,7 +42,7 @@ public class VoiceOverController : MonoBehaviour {
 	}
 
 	IEnumerator WaitForClip(AudioClip clip) {
-		yield return new WaitForSeconds (clip.length);
+		yield return new WaitForSeconds (clip.length + clipWaitBuffer);
 
 		tutorialScript.AudioDonePlaying ();
 	}

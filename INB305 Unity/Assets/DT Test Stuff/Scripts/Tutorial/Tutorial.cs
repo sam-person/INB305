@@ -9,6 +9,7 @@ public class Tutorial : MonoBehaviour {
 	[Tooltip("If true, press 'T' to start tutorial. Warning: will overlap tutorial if one is already in progress")]
 	public bool canRestartTutorial = true;
 	public float startWaitTime = 5f;
+	bool inTutorial = false;
 
 	MeshRenderer[] originalRenderers;
 	Color[] originalColours;
@@ -19,6 +20,10 @@ public class Tutorial : MonoBehaviour {
 
 	// Reference
 	VoiceOverController voiceController;
+
+	// Meshes
+	public MeshRenderer[] stage2Meshes;
+
 
 	void Start() {
 		voiceController = GetComponent<VoiceOverController> ();
@@ -32,7 +37,8 @@ public class Tutorial : MonoBehaviour {
 			StartTutorial ();
 		}
 
-		TutorialStages ();
+		if (inTutorial)
+			TutorialStages();
 	}
 
 	void StartTutorial() {
@@ -41,11 +47,28 @@ public class Tutorial : MonoBehaviour {
 	}
 
 	void TutorialStages() {
+		switch (tutorialStage) {
+		case 1:
+			if (!audioSourcePlaying) {
+				TriggerNextStage ();
+			}
+			break;
+		case 2:
+			UnHighlight ();
+			HighlightMesh (stage2Meshes);
+			voiceController.PlayClipAtStage (tutorialStage);
 
+			break;
+		case 3:
+			UnHighlight ();
+
+			break;
+		}
 	}
 
 	IEnumerator StartTutorialCoroutine() {
 		yield return new WaitForSeconds (startWaitTime);
+		inTutorial = true;
 		voiceController.PlayClipAtStage (tutorialStage);
 		
 	}
@@ -72,6 +95,6 @@ public class Tutorial : MonoBehaviour {
 	}
 
 	public void TriggerNextStage() {
-
+		tutorialStage++;
 	}
 }
