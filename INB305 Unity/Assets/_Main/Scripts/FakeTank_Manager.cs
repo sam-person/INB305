@@ -9,12 +9,13 @@ public class FakeTank_Manager : MonoBehaviour {
 	[Header("Settings")]
 	public VRTK.VRTK_SpringLever crankL_SpringLever, crankR_SpringLever;
 	public float minimumSpeed, fuelThreshold, fuelConsumption;
-	public Image fuelBar, speedBarL, reverseBarL, speedBarR, reverseBarR;
+	public Image fuelBar, fuelBarFurnace, speedBarL, reverseBarL, speedBarR, reverseBarR;
 	[Header("Stats")]
 	[Range(0,1)]
 	public float fuel = 1;
 	public float underThresholdClamp;
 	public TMPro.TextMeshPro display;
+	public TMPro.TextMeshProUGUI lowFuel;
 
 	public EngineSound engineSound;
 
@@ -53,12 +54,13 @@ public class FakeTank_Manager : MonoBehaviour {
 			crankL = Mathf.Clamp(crankL, -underThresholdClamp, underThresholdClamp);
 			crankR = Mathf.Clamp(crankR, -underThresholdClamp, underThresholdClamp);
 		}
-		fuel = Mathf.Max(0,fuel-(fuelConsumption*Time.deltaTime*0.001f));
+		fuel = Mathf.Max(0,fuel-(fuelConsumption*Time.deltaTime*0.001f*(Mathf.Abs(crankL)+Mathf.Abs(crankR)+0.1f)));
 
 		CheckLowFuel (); // Update low fuel alarms
 
 		display.text = "Left: " + (crankL * 100.0f).ToString("F2") + "\nRight: " + (crankR * 100.0f).ToString("F2") + "\nFuel: " + (fuel * 100.0f).ToString("F2");
 		fuelBar.fillAmount = fuel;
+		fuelBarFurnace.fillAmount = fuel;
 		speedBarL.fillAmount = crankL;
 		reverseBarL.fillAmount = -crankL;
 		speedBarR.fillAmount = crankR;
@@ -88,10 +90,13 @@ public class FakeTank_Manager : MonoBehaviour {
 		// Check for fuel thresholds
 		if (fuel < (fuelThreshold * 0.5f)) {
 			lowFuelStage = 2;
+			lowFuel.text = "FUEL EMPTY";
 		} else if (fuel < fuelThreshold) {
 			lowFuelStage = 1;
+			lowFuel.text = "LOW FUEL";
 		} else {
 			lowFuelStage = 0;
+			lowFuel.text = "FUEL : " + fuel.ToString("P0");
 		}
 
 		switch (lowFuelStage) {

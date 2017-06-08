@@ -35,6 +35,8 @@ public class Shovel : MonoBehaviour {
 
 	Vector3 startpos;
 
+	public TMPro.TextMeshPro display;
+
 	void Start() {
 		next = this.transform.position;
 		audioSource = GetComponent<AudioSource> ();
@@ -55,6 +57,13 @@ public class Shovel : MonoBehaviour {
 		CheckUpAngle ();
 
 		CheckOutOfMap ();
+
+		if(coalAmount > 0){
+			display.text = "Coal: " + coalAmount;
+		}
+		else{
+			display.text = "";
+		}
 	}
 
 	void CalculateVelocity() {
