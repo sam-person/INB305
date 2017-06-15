@@ -144,7 +144,6 @@ namespace VRTK
         protected virtual void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
         {
             leverRigidbody.angularDrag = releasedFriction;
-            SnapToValue(0);
         }
 
         protected virtual void InitHingeJoint()

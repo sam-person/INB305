@@ -46,7 +46,7 @@ namespace VRTK
         public bool lockAtLimits = false;
 
         protected float angularVelocityLimit = 150f;
-        protected float springStrengthValue = 15f;
+        protected float springStrengthValue = 150f;
         protected float springDamperValue = 5f;
 
         private Quaternion initialLocalRotation;
@@ -135,8 +135,7 @@ namespace VRTK
                 wheelHinge = gameObject.AddComponent<HingeJoint>();
                 wheelHingeCreated = true;
             }
-			wheelHinge.useSpring = true;
-			ConfigureHingeSpring();
+
             SetupHingeRestrictions();
         }
 
@@ -183,7 +182,7 @@ namespace VRTK
             JointSpring snapSpring = new JointSpring();
             snapSpring.spring = springStrengthValue;
             snapSpring.damper = springDamperValue;
-            snapSpring.targetPosition = 90;
+            snapSpring.targetPosition = springAngle + wheelHinge.limits.min;
             wheelHinge.spring = snapSpring;
         }
 
