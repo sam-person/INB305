@@ -730,17 +730,18 @@ namespace VRTK
 
         protected virtual void InitialiseHighlighter()
         {
-            if (touchHighlightColor != Color.clear && !objectHighlighter)
-            {
-                autoHighlighter = false;
-                objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
-                if (objectHighlighter == null)
-                {
-                    autoHighlighter = true;
-                    objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
-                }
-                objectHighlighter.Initialise(touchHighlightColor);
-            }
+        	
+//            if (touchHighlightColor != Color.clear && !objectHighlighter)
+//            {
+//                autoHighlighter = false;
+//                objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
+//                if (objectHighlighter == null)
+//                {
+//                    autoHighlighter = true;
+//                    objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+//                }
+//                objectHighlighter.Initialise(touchHighlightColor);
+//            }
         }
 
         private void ToggleEnableState(bool state)
