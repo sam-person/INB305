@@ -50,6 +50,7 @@ public class TutorialManager : MonoBehaviour {
 	public ControllerLineRenderer leftHandLine, rightHandLine;
 
 	FakeTank_Manager tank;
+	public VRTK.VRTK_Door door;
 
 	void Awake(){
 		tank = FindObjectOfType<FakeTank_Manager>();
@@ -67,6 +68,7 @@ public class TutorialManager : MonoBehaviour {
 		if(tutorialStage == -1 && Input.GetKeyDown(KeyCode.T)){
 			tutorialStage = 0;
 			StartStage(stages[0]);
+			door.popDoor();
 		}
 
 		switch(tutorialStage){

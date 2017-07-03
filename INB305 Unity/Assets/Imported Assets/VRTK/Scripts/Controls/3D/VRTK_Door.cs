@@ -499,5 +499,12 @@ namespace VRTK
         {
             return (door ? door : gameObject);
         }
+
+        public void popDoor(){
+			float forceToApply = (5f * GetDirectionFromJoint());
+			doorSnapForce.enabled = true;
+            doorSnapForce.relativeForce = GetThirdDirection(doorHinge.axis, secondaryDirection) * (subDirection * forceToApply);
+			doorSnapForce.enabled = false;
+        }
     }
 }
