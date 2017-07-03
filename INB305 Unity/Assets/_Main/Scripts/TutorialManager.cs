@@ -51,9 +51,12 @@ public class TutorialManager : MonoBehaviour {
 
 	FakeTank_Manager tank;
 	public VRTK.VRTK_Door door;
+	public VRTK.VRTK_InteractableObject shovel_interactable;
+	Shovel shovel;
 
 	void Awake(){
 		tank = FindObjectOfType<FakeTank_Manager>();
+		shovel = shovel_interactable.GetComponent<Shovel>();
 	}
 
 	// Use this for initialization
@@ -68,7 +71,7 @@ public class TutorialManager : MonoBehaviour {
 		if(tutorialStage == -1 && Input.GetKeyDown(KeyCode.T)){
 			tutorialStage = 0;
 			StartStage(stages[0]);
-			door.popDoor();
+			tank.fuel = 0.3f;
 		}
 
 		switch(tutorialStage){
@@ -79,6 +82,27 @@ public class TutorialManager : MonoBehaviour {
 				break;
 			case 1:
 				if(!voiceoverSource.isPlaying && tank.crankL != 0 && tank.crankR != 0){
+					AdvanceStage();
+				}
+				break;
+			case 2:
+				if(!voiceoverSource.isPlaying && tank.fuel < 0.2f){
+					AdvanceStage();
+				}
+				break;
+			case 3:
+				if(!voiceoverSource.isPlaying && shovel_interactable.IsGrabbed()){
+					AdvanceStage();
+				}
+				break;
+			case 4:
+				if(!voiceoverSource.isPlaying && shovel.coalAmount > 0){
+					AdvanceStage();
+					door.popDoor();
+				}
+				break;
+			case 5:
+				if(!voiceoverSource.isPlaying && tank.fuel > 0.5f){
 					AdvanceStage();
 				}
 				break;
