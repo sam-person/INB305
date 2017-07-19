@@ -14,6 +14,8 @@ public class Tank_Network : MonoBehaviour {
 
 	public string testPacket;
 
+	public float speedMultiplier;
+
 	Socket sender;
 
 	// Use this for initialization
@@ -80,20 +82,25 @@ public class Tank_Network : MonoBehaviour {
 
 	public void SendSpeed(float speedL, float speedR){
 		if (speedL > 0) {
-			string packetL = "lf" + Mathf.RoundToInt (Mathf.Abs (speedL)).ToString ("D3");
+			string packetL = "lf" + Mathf.RoundToInt (Mathf.Abs (speedL*speedMultiplier)).ToString ("D3");
 			Send (packetL);
+			//Debug.Log (packetL);
 		} else {
-			string packetL = "lb" + Mathf.RoundToInt (Mathf.Abs (speedL)).ToString ("D3");
+			string packetL = "lb" + Mathf.RoundToInt (Mathf.Abs (speedL*speedMultiplier)).ToString ("D3");
 			Send (packetL);
+			//Debug.Log (packetL);
 		}
 
 		if (speedR > 0) {
-			string packetR = "rf" + Mathf.RoundToInt (Mathf.Abs (speedR)).ToString ("D3");
+			string packetR = "rf" + Mathf.RoundToInt (Mathf.Abs (speedR*speedMultiplier)).ToString ("D3");
 			Send (packetR);
+			//Debug.Log (packetR);
 		} else {
-			string packetR = "rb" + Mathf.RoundToInt (Mathf.Abs (speedR)).ToString ("D3");
+			string packetR = "rb" + Mathf.RoundToInt (Mathf.Abs (speedR*speedMultiplier)).ToString ("D3");
 			Send (packetR);
+			//Debug.Log (packetR);
 		}
+
 
 	}
 
