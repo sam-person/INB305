@@ -42,8 +42,7 @@ public class TutorialManager : MonoBehaviour {
 
 	}
 
-	[SerializeField]
-	int tutorialStage = -1;
+	public int tutorialStage = -1;
 
 	public AudioSource voiceoverSource;
 	public TutorialStage[] stages;
@@ -65,14 +64,22 @@ public class TutorialManager : MonoBehaviour {
 			s.Setup();
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(tutorialStage == -1 && Input.GetKeyDown(KeyCode.T)){
+
+	public bool StartTutorial(){
+		if(tutorialStage == -1){
 			tutorialStage = 0;
 			StartStage(stages[0]);
 			tank.fuel = 0.3f;
+			return true;
 		}
+		else{
+			return false;
+		}
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
 
 		switch(tutorialStage){
 			case 0:

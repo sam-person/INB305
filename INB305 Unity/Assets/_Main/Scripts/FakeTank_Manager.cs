@@ -14,7 +14,7 @@ public class FakeTank_Manager : MonoBehaviour {
 	[Range(0,1)]
 	public float fuel = 1;
 	public float underThresholdClamp;
-	public TMPro.TextMeshPro display;
+	public TMPro.TextMeshProUGUI display;
 	public TMPro.TextMeshProUGUI lowFuel;
 
 	public EngineSound engineSound;

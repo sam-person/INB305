@@ -12,8 +12,6 @@ public class Tank_Network : MonoBehaviour {
 	public string ip;
 	public int port;
 
-	public string testPacket;
-
 	public float speedMultiplier;
 
 	Socket sender;
@@ -34,30 +32,6 @@ public class Tank_Network : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			Debug.Log ("Left");
-			Send ("lb050");
-			Send ("rf050");
-		}
-		if (Input.GetKeyDown (KeyCode.RightArrow)) {
-			Debug.Log ("Right");
-			Send ("rb050");
-			Send ("lf050");
-		}
-		if (Input.GetKeyDown (KeyCode.UpArrow)) {
-			Debug.Log ("Forward");
-			Send ("lf050");
-			Send ("rf050");
-		}
-		if (Input.GetKeyDown (KeyCode.DownArrow)) {
-			Debug.Log ("Back");
-			Send ("lb050");
-			Send ("rb050");
-		}
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			Debug.Log (testPacket);
-			Send (testPacket);
-		}
 		if (Input.GetKeyDown (KeyCode.Return)) {
 			Send ("lf000");
 			//Send ("lb000");
