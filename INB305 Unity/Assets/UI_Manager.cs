@@ -8,13 +8,17 @@ public class UI_Manager : MonoBehaviour {
 	public TutorialManager tutorial;
 	public TMPro.TextMeshProUGUI statusText, tutorialstageText, toggleFlagText;
 	public FlagTracker flagTracker;
-
-	public List<RectTransform> UI_Flags;
-
-	public RectTransform minimapPanel;
 	public GameObject flagPrefab;
 
+	[Header("Minimap 1")]
+	public List<RectTransform> UI_Flags;
+	public RectTransform minimapPanel;
 	public Vector2 MinimapSize;
+
+	[Header("Minimap 2")]
+	public List<RectTransform> UI_Flags2;
+	public RectTransform minimapPanel2;
+	public Vector2 MinimapSize2;
 
 	// Use this for initialization
 	void Start () {
@@ -31,6 +35,12 @@ public class UI_Manager : MonoBehaviour {
 			UI_Flags.Add(Instantiate(flagPrefab, minimapPanel).GetComponent<RectTransform>());
 		}
 
+		if(UI_Flags2.Count - 1 < flagTracker.flags.Count){
+			UI_Flags2.Add(Instantiate(flagPrefab, minimapPanel2).GetComponent<RectTransform>());
+			UI_Flags2[UI_Flags2.Count-1].GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+			UI_Flags2[UI_Flags2.Count-1].GetComponent<RectTransform>().position = minimapPanel2.position;
+		}
+
 		if(tutorial.tutorialStage >= 0){
 			tutorialstageText.text = "Stage: " + tutorial.tutorialStage;
 		}
@@ -45,10 +55,19 @@ public class UI_Manager : MonoBehaviour {
 			toggleFlagText.text = "Setup Inactive.\n" + flagTracker.flags.Count + " Flags Registered.";
 		}
 
-		UI_Flags[0].anchoredPosition = getRelativePosition(flagTracker.tracker.transform.position);
+
+		//1
+		UI_Flags[0].anchoredPosition = getRelativePosition(flagTracker.tracker.transform.position, MinimapSize);
 
 		for(int i = 1; i < UI_Flags.Count; i++){
-			UI_Flags[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1]);
+			UI_Flags[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1], MinimapSize);
+		}
+
+		//2
+		UI_Flags2[0].anchoredPosition = getRelativePosition(flagTracker.tracker.transform.position, MinimapSize2);
+
+		for(int i = 1; i < UI_Flags2.Count; i++){
+			UI_Flags2[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1], MinimapSize2);
 		}
 
 	}
@@ -76,10 +95,26 @@ public class UI_Manager : MonoBehaviour {
 		}
 	}
 
-	Vector2 getRelativePosition(Vector3 input){
+	public void ResetFlagButton(){
+		flagTracker.ResetFlags();
+		RectTransform tank1, tank2;
+		tank1 = UI_Flags[0];
+		tank2 = UI_Flags2[0];
+		for(int i = 1; i < UI_Flags.Count; i++){
+			Destroy(UI_Flags[i].gameObject);
+			Destroy(UI_Flags2[i].gameObject);
+		}
+		UI_Flags.Clear();
+		UI_Flags2.Clear();
+		UI_Flags.Add(tank1);
+		UI_Flags2.Add(tank2);
+		DisplayMessage("Flags Reset.");
+	}
+
+	Vector2 getRelativePosition(Vector3 input, Vector2 size){
 		float x, y;
-		x = Mathf.Lerp(0,MinimapSize.x,flagTracker.GetPercentagePosition(input).x);
-		y = Mathf.Lerp(0,MinimapSize.y,flagTracker.GetPercentagePosition(input).z);
+		x = Mathf.Lerp(0,size.x,flagTracker.GetPercentagePosition(input).x);
+		y = Mathf.Lerp(0,size.y,flagTracker.GetPercentagePosition(input).z);
 		return new Vector2(x,y);
 	}
 }

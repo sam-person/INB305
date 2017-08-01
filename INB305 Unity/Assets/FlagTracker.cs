@@ -95,4 +95,8 @@ public class FlagTracker : MonoBehaviour {
 			return new Vector3(x, input.y, z);
     	}
     }
+
+    public void ResetFlags(){
+    	flags.Clear();
+    }
 }
