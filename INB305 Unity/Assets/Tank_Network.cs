@@ -16,6 +16,8 @@ public class Tank_Network : MonoBehaviour {
 
 	Socket sender;
 
+	public bool connected;
+
 	// Use this for initialization
 	void Start () {
 		if (!useNetwork) {
@@ -47,6 +49,7 @@ public class Tank_Network : MonoBehaviour {
 		sender = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		sender.Connect (ipendpoint);
 		Debug.Log (sender.RemoteEndPoint.ToString ());
+		connected = true;
 	}
 
 	void Send(string message){

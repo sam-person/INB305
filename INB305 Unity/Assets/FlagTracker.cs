@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using VRTK;
 
 public class FlagTracker : MonoBehaviour {
@@ -13,9 +14,49 @@ public class FlagTracker : MonoBehaviour {
 
 	public GameObject tracker;
 
+	public float threshold;
+
+	public int nearFlag = -1;
+
+	public GameObject uploadPanel;
+
+	public Image uploadBar;
+
+	public float uploadMaxTime, uploadTimer;
+
+	public TMPro.TextMeshProUGUI uploadText;
+
+	public AudioSource dialupSound;
+
+
 	// Use this for initialization
 	void Start () {
 		GetComponent<VRTK_ControllerEvents>().TriggerUnclicked += new ControllerInteractionEventHandler(DoTriggerUnClicked);
+	}
+
+	void Update(){
+		//check if we're near each flag
+		nearFlag = -1;
+		for(int i = 0; i < flags.Count; i++){
+			if(Vector3.Distance(flags[i], tracker.transform.position) < threshold){
+				nearFlag = i;
+			}
+		}
+
+		if(nearFlag == -1){
+			dialupSound.Stop();
+			uploadPanel.SetActive(false);
+			uploadTimer = 0;
+		}
+		else{
+			uploadPanel.SetActive(true);
+			if(uploadTimer == 0){
+				dialupSound.Play();
+			}
+			uploadText.text = "Flag " + nearFlag.ToString() + " UPLOADING...";
+			uploadTimer = Mathf.Min(uploadTimer + Time.deltaTime, uploadMaxTime);
+			uploadBar.fillAmount = Mathf.InverseLerp(0, uploadMaxTime, uploadTimer);
+		}
 	}
 
 	void OnDrawGizmos () {
@@ -37,15 +78,20 @@ public class FlagTracker : MonoBehaviour {
 		if(!setup){
 			return;
 		}
-
+		for(int i = 0; i < flags.Count; i++){
+			if(Vector3.Distance(flags[i], transform.position) < threshold){
+				Debug.Log("Can't place a flag within threshold of another flag");
+				return;
+			}
+		}
 
 		AddFlag(transform.position);
 		GetComponent<VRTK_ControllerActions>().TriggerHapticPulse(1,0.5f,0.01f);
-
 		Debug.Log("Placing a flag at " + transform.position.ToString() + " | Relative position: " + GetPercentagePosition(transform.position).ToString());
 
 
     }
+
 
     void AddFlag(Vector3 position){
 		flags.Add(position);

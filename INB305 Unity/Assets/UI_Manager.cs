@@ -6,9 +6,10 @@ public class UI_Manager : MonoBehaviour {
 
 	public GameObject UI_Panel;
 	public TutorialManager tutorial;
-	public TMPro.TextMeshProUGUI statusText, tutorialstageText, toggleFlagText;
+	public TMPro.TextMeshProUGUI statusText, tutorialstageText, toggleFlagText, networkText;
 	public FlagTracker flagTracker;
 	public GameObject flagPrefab;
+	public Tank_Network network;
 
 	[Header("Minimap 1")]
 	public List<RectTransform> UI_Flags;
@@ -68,6 +69,18 @@ public class UI_Manager : MonoBehaviour {
 
 		for(int i = 1; i < UI_Flags2.Count; i++){
 			UI_Flags2[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1], MinimapSize2);
+		}
+
+		if(!network.useNetwork){
+			networkText.text = "Tank not connected - networking disabled!";
+		}
+		else{
+			if(network.connected){
+				networkText.text = "Tank connected!";
+			}
+			else{
+				networkText.text = "Warning: Tank Failed to Connect!";
+			}
 		}
 
 	}
