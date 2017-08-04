@@ -69,7 +69,7 @@ public class TutorialManager : MonoBehaviour {
 		if(tutorialStage == -1){
 			tutorialStage = 0;
 			StartStage(stages[0]);
-			tank.fuel = 0.3f;
+			tank.fuel = 0.25f;
 			return true;
 		}
 		else{

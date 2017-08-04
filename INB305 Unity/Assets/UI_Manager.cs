@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Manager : MonoBehaviour {
 
@@ -57,18 +58,34 @@ public class UI_Manager : MonoBehaviour {
 		}
 
 
+		float degrees;
+		if(Vector3.Angle(flagTracker.tracker.transform.right, Vector3.forward) > 90){
+			degrees = 360 - Vector3.Angle(flagTracker.tracker.transform.right, Vector3.right);
+		}
+		else{
+			degrees = Vector3.Angle(flagTracker.tracker.transform.right, Vector3.right);
+		}
+
 		//1
 		UI_Flags[0].anchoredPosition = getRelativePosition(flagTracker.tracker.transform.position, MinimapSize);
+		UI_Flags[0].eulerAngles = new Vector3(UI_Flags[0].eulerAngles.x, UI_Flags[0].eulerAngles.y, degrees);
 
 		for(int i = 1; i < UI_Flags.Count; i++){
-			UI_Flags[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1], MinimapSize);
+			UI_Flags[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1].position, MinimapSize);
+			if(!flagTracker.flags[i-1].active){
+				UI_Flags[i].GetComponent<Image>().color = Color.black;
+			}
 		}
 
 		//2
 		UI_Flags2[0].anchoredPosition = getRelativePosition(flagTracker.tracker.transform.position, MinimapSize2);
+		UI_Flags2[0].eulerAngles = new Vector3(UI_Flags2[0].eulerAngles.x, UI_Flags2[0].eulerAngles.y, degrees);
 
 		for(int i = 1; i < UI_Flags2.Count; i++){
-			UI_Flags2[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1], MinimapSize2);
+			UI_Flags2[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1].position, MinimapSize2);
+			if(!flagTracker.flags[i-1].active){
+				UI_Flags2[i].GetComponent<Image>().color = Color.black;
+			}
 		}
 
 		if(!network.useNetwork){

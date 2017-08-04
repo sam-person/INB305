@@ -6,9 +6,19 @@ using VRTK;
 
 public class FlagTracker : MonoBehaviour {
 
+	[System.Serializable]
+	public class Flag{
+		public Vector3 position;
+		public bool active = true;
+		public Flag(Vector3 position, bool active){
+			this.position = position;
+			this.active = active;
+		}
+	}
+
 	public bool setup = false;
 
-	public List<Vector3> flags;
+	public List<Flag> flags;
 
 	public Vector3 lowerBound, higherBound;
 
@@ -38,7 +48,7 @@ public class FlagTracker : MonoBehaviour {
 		//check if we're near each flag
 		nearFlag = -1;
 		for(int i = 0; i < flags.Count; i++){
-			if(Vector3.Distance(flags[i], tracker.transform.position) < threshold){
+			if(Vector3.Distance(flags[i].position, new Vector3(tracker.transform.position.x, 0, tracker.transform.position.z)) < threshold){
 				nearFlag = i;
 			}
 		}
@@ -50,19 +60,31 @@ public class FlagTracker : MonoBehaviour {
 		}
 		else{
 			uploadPanel.SetActive(true);
-			if(uploadTimer == 0){
-				dialupSound.Play();
+			if(flags[nearFlag].active){
+				if(uploadTimer == 0){
+					dialupSound.Play();
+				}
+				uploadText.text = "Flag " + nearFlag.ToString() + " UPLOADING...";
+				uploadTimer = Mathf.Min(uploadTimer + Time.deltaTime, uploadMaxTime);
+				uploadBar.color = Color.red;
+				uploadBar.fillAmount = Mathf.InverseLerp(0, uploadMaxTime, uploadTimer);
+				if(uploadTimer == uploadMaxTime){
+					flags[nearFlag].active = false;
+				}
 			}
-			uploadText.text = "Flag " + nearFlag.ToString() + " UPLOADING...";
-			uploadTimer = Mathf.Min(uploadTimer + Time.deltaTime, uploadMaxTime);
-			uploadBar.fillAmount = Mathf.InverseLerp(0, uploadMaxTime, uploadTimer);
+			else{
+				uploadText.text = "UPLOAD COMPLETE!";
+				uploadTimer = uploadMaxTime;
+				uploadBar.color = Color.green;
+				uploadBar.fillAmount = 1;
+			}
 		}
 	}
 
 	void OnDrawGizmos () {
 		Gizmos.color = Color.blue;
-		foreach(Vector3 f in flags){
-			Gizmos.DrawSphere(f, 0.05f);
+		foreach(Flag f in flags){
+			Gizmos.DrawSphere(f.position, 0.05f);
 		}
 
 		if(flags.Count >= 2){
@@ -79,7 +101,7 @@ public class FlagTracker : MonoBehaviour {
 			return;
 		}
 		for(int i = 0; i < flags.Count; i++){
-			if(Vector3.Distance(flags[i], transform.position) < threshold){
+			if(Vector3.Distance(flags[i].position, transform.position) < threshold*2){
 				Debug.Log("Can't place a flag within threshold of another flag");
 				return;
 			}
@@ -94,7 +116,7 @@ public class FlagTracker : MonoBehaviour {
 
 
     void AddFlag(Vector3 position){
-		flags.Add(position);
+		flags.Add(new Flag(new Vector3(position.x, 0, position.z), true));
 		if(flags.Count >= 2){
 			CalculateBounds();
 		}
@@ -106,12 +128,12 @@ public class FlagTracker : MonoBehaviour {
 		//lower bounds
     	x = Mathf.Infinity;
     	z = Mathf.Infinity;
-    	foreach(Vector3 v in flags){
-    		if(v.x < x){
-    			x = v.x;
+    	foreach(Flag v in flags){
+    		if(v.position.x < x){
+    			x = v.position.x;
     		}
-    		if(v.z < z){
-    			z = v.z;
+			if(v.position.z < z){
+				z = v.position.z;
     		}
     	}
     	lowerBound = new Vector3(x-0.5f,0,z-0.5f);
@@ -119,12 +141,12 @@ public class FlagTracker : MonoBehaviour {
 		//higher bounds
     	x = Mathf.NegativeInfinity;
     	z = Mathf.NegativeInfinity;
-    	foreach(Vector3 v in flags){
-    		if(v.x > x){
-    			x = v.x;
+    	foreach(Flag v in flags){
+			if(v.position.x > x){
+				x = v.position.x;
     		}
-    		if(v.z > z){
-    			z = v.z;
+			if(v.position.z > z){
+				z = v.position.z;
     		}
     	}
     	higherBound = new Vector3(x+0.5f,0,z+0.5f);
