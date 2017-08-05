@@ -58,11 +58,13 @@ public class Shovel : MonoBehaviour {
 
 		CheckOutOfMap ();
 
-		if(coalAmount > 0){
-			display.text = "Coal: " + coalAmount;
-		}
-		else{
-			display.text = "";
+		if (shovelTipScript.isInFurnace && coalAmount > 0) {
+				furnaceScript.AcceptFuel (coalAmount);
+				shovelTipAudioSource.volume = 1;
+				shovelTipAudioSource.pitch = 1 + Random.Range (-0.1f, 0.1f);
+				shovelTipAudioSource.clip = fireWhooshSound;
+				shovelTipAudioSource.Play ();
+				LoseCoal(coalAmount);
 		}
 	}
 
@@ -99,9 +101,6 @@ public class Shovel : MonoBehaviour {
 			lossAmount = lossRate * angle / max.y * Time.deltaTime;
 		}
 
-		if (shovelTipScript.isInFurnace) {
-			furnaceScript.AcceptFuel (lossAmount);
-		}
 
 		LoseCoal (lossAmount);
 	}
@@ -111,13 +110,7 @@ public class Shovel : MonoBehaviour {
 	void CheckUpAngle() {
 		if (Vector3.Angle (this.transform.up, Vector3.up) > 90f) {
 			isUpsideDown = true;
-			if (shovelTipScript.isInFurnace && coalAmount > 0) {
-				furnaceScript.AcceptFuel (coalAmount);
-				shovelTipAudioSource.volume = 1;
-				shovelTipAudioSource.pitch = 1 + Random.Range (-0.1f, 0.1f);
-				shovelTipAudioSource.clip = fireWhooshSound;
-				shovelTipAudioSource.Play ();
-			}
+
 			LoseCoal (maxAmount);
 		} else {
 			isUpsideDown = false;

@@ -167,4 +167,20 @@ public class FlagTracker : MonoBehaviour {
     public void ResetFlags(){
     	flags.Clear();
     }
+
+    public void ActivateAllFlags(){
+    	foreach(Flag f in flags){
+    		f.active = true;
+    	}
+    }
+
+    public bool AllFlagsActive(){
+    	bool a = true;
+		foreach(Flag f in flags){
+    		if(f.active){
+    			a = false;
+    		}
+    	}
+    	return a;
+    }
 }

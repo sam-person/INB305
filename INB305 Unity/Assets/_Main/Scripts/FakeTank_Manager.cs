@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class FakeTank_Manager : MonoBehaviour {
 
+	public bool online = false;
 	public float crankL, crankR;
 	[Header("Settings")]
 	public VRTK.VRTK_SpringLever crankL_SpringLever, crankR_SpringLever;
@@ -16,6 +17,7 @@ public class FakeTank_Manager : MonoBehaviour {
 	public float underThresholdClamp;
 	public TMPro.TextMeshProUGUI display;
 	public TMPro.TextMeshProUGUI lowFuel;
+	public int lowFuelStage = 0;
 
 	public EngineSound engineSound;
 
@@ -34,16 +36,39 @@ public class FakeTank_Manager : MonoBehaviour {
 
 	Tank_Network net;
 
+	[Header("Timer")]
+	public TMPro.TextMeshProUGUI timer;
+	public bool countdownActive = false;
+	public float maxTime;
+	public float timeRemaining;
+
 	// Use this for initialization
 	void Start () {
 		// Store initial values
 		originalLightColor = normalLights [0].color;
 		originalLightIntensity = normalLights [0].intensity;
 		net = GetComponent<Tank_Network> ();
+		timeRemaining = maxTime;
+	}
+
+	public void StartupTank(){
+		engineSound.GetComponent<AudioSource>().Play();
+		online = true;
+	}
+
+	public void ShutdownTank(){
+		engineSound.GetComponent<AudioSource>().Stop();
+		online = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(!online){
+			display.text = "Tank Offline";
+			lowFuel.text = "OFFLINE";
+			timer.text = "-:--";
+			return;
+		}
 		crankL = (-(crankL_SpringLever.GetNormalizedValue()/100.0f)+0.5f)*2.0f;
 		crankR = (-(crankR_SpringLever.GetNormalizedValue()/100.0f)+0.5f)*2.0f;
 
@@ -65,10 +90,27 @@ public class FakeTank_Manager : MonoBehaviour {
 		reverseBarL.fillAmount = -crankL;
 		speedBarR.fillAmount = crankR;
 		reverseBarR.fillAmount = -crankR;
+
+
+		if(countdownActive){
+			if(timeRemaining > 0){
+				timeRemaining = Mathf.Max(timeRemaining - Time.deltaTime, 0);
+			}
+			else{
+				countdownActive = false;
+				ShutdownTank();
+			}
+		}
+
+		if(timeRemaining < 10){
+			timer.color = new Color(1,0,0,Mathf.Sin(Time.time*20));
+		}
+		string clockText = Mathf.Floor(timeRemaining / 60).ToString("0") + ":" + Mathf.Floor(timeRemaining % 60).ToString("00");
+		timer.text = clockText;
 	}
 
 	void FixedUpdate(){
-		if (!net.useNetwork) {
+		if (!net.useNetwork | !online) {
 			return;
 		}
 
@@ -83,14 +125,15 @@ public class FakeTank_Manager : MonoBehaviour {
 		engineSound.SetVolume (fuel /1.5f + 0.1f); // Volume
 	}
 
-	public int lowFuelStage = 0;
+
 
 	void CheckLowFuel() {
+		
 
 		// Check for fuel thresholds
 		if (fuel < (fuelThreshold * 0.5f)) {
 			lowFuelStage = 2;
-			lowFuel.text = "FUEL EMPTY";
+			lowFuel.text = "FUEL CRITICAL";
 		} else if (fuel < fuelThreshold) {
 			lowFuelStage = 1;
 			lowFuel.text = "LOW FUEL";
@@ -101,7 +144,7 @@ public class FakeTank_Manager : MonoBehaviour {
 
 		switch (lowFuelStage) {
 		case 1:
-			alarmSound.SetVolume (0.3f); // set volume to low
+			alarmSound.SetVolume (0.1f); // set volume to low
 
 			// Stage 1 settings
 			// Play alarm sound if alarm is not playing
@@ -127,7 +170,7 @@ public class FakeTank_Manager : MonoBehaviour {
 
 			// Stage 2 settings
 			DimLights (true); // continuously dim lights based on fuel
-			alarmSound.SetVolume (); // Sets volume to 1
+			alarmSound.SetVolume (0.5f); // Sets volume to 1
 
 			// turn alarm lights on if they aren't on
 			if (!alarmLights [0].activeSelf)

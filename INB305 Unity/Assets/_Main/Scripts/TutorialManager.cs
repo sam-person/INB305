@@ -70,6 +70,7 @@ public class TutorialManager : MonoBehaviour {
 			tutorialStage = 0;
 			StartStage(stages[0]);
 			tank.fuel = 0.25f;
+			tank.StartupTank();
 			return true;
 		}
 		else{
@@ -111,6 +112,7 @@ public class TutorialManager : MonoBehaviour {
 			case 5:
 				if(!voiceoverSource.isPlaying && tank.fuel > 0.5f){
 					AdvanceStage();
+					tank.countdownActive = true;
 				}
 				break;
 		}
