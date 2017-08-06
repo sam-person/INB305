@@ -75,6 +75,9 @@ public class UI_Manager : MonoBehaviour {
 			if(!flagTracker.flags[i-1].active){
 				UI_Flags[i].GetComponent<Image>().color = Color.black;
 			}
+			else{
+				UI_Flags[i].GetComponent<Image>().color = Color.white;
+			}
 		}
 
 		//2
@@ -85,6 +88,9 @@ public class UI_Manager : MonoBehaviour {
 			UI_Flags2[i].anchoredPosition = getRelativePosition(flagTracker.flags[i-1].position, MinimapSize2);
 			if(!flagTracker.flags[i-1].active){
 				UI_Flags2[i].GetComponent<Image>().color = Color.black;
+			}
+			else{
+				UI_Flags2[i].GetComponent<Image>().color = Color.white;
 			}
 		}
 

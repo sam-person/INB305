@@ -35,12 +35,15 @@ public class FakeTank_Manager : MonoBehaviour {
 	public Vector2 lightIntensityThresholds = new Vector2();
 
 	Tank_Network net;
+	TutorialManager voiceover;
+	public FlagTracker flags;
 
 	[Header("Timer")]
 	public TMPro.TextMeshProUGUI timer;
 	public bool countdownActive = false;
 	public float maxTime;
 	public float timeRemaining;
+	public AudioClip outOfTimeClip;
 
 	// Use this for initialization
 	void Start () {
@@ -49,16 +52,22 @@ public class FakeTank_Manager : MonoBehaviour {
 		originalLightIntensity = normalLights [0].intensity;
 		net = GetComponent<Tank_Network> ();
 		timeRemaining = maxTime;
+		voiceover = FindObjectOfType<TutorialManager>();
 	}
 
 	public void StartupTank(){
 		engineSound.GetComponent<AudioSource>().Play();
 		online = true;
+		timeRemaining = maxTime;
+		flags.ActivateAllFlags();
 	}
 
 	public void ShutdownTank(){
 		engineSound.GetComponent<AudioSource>().Stop();
 		online = false;
+		countdownActive = false;
+		timeRemaining = 0;
+		voiceover.tutorialStage = -1;
 	}
 	
 	// Update is called once per frame
@@ -98,6 +107,7 @@ public class FakeTank_Manager : MonoBehaviour {
 			}
 			else{
 				countdownActive = false;
+				voiceover.PlayClip(outOfTimeClip);
 				ShutdownTank();
 			}
 		}
@@ -144,7 +154,7 @@ public class FakeTank_Manager : MonoBehaviour {
 
 		switch (lowFuelStage) {
 		case 1:
-			alarmSound.SetVolume (0.1f); // set volume to low
+			alarmSound.SetVolume (0.0f); // set volume to low
 
 			// Stage 1 settings
 			// Play alarm sound if alarm is not playing
@@ -170,7 +180,7 @@ public class FakeTank_Manager : MonoBehaviour {
 
 			// Stage 2 settings
 			DimLights (true); // continuously dim lights based on fuel
-			alarmSound.SetVolume (0.5f); // Sets volume to 1
+			alarmSound.SetVolume (0.1f); // Sets volume to 1
 
 			// turn alarm lights on if they aren't on
 			if (!alarmLights [0].activeSelf)
@@ -183,14 +193,14 @@ public class FakeTank_Manager : MonoBehaviour {
 
 			break;
 
-		default:
+		case 0:
 			// Normal Stage 0 settings
 			// Turn alarm sound off if it is on
 			if (alarmSound.IsPlaying)
 				alarmSound.StopAlarm ();
 
 			// Turn alarm lights off if it is on
-			if (!alarmLights [0].activeSelf)
+			if (alarmLights [0].activeSelf)
 				ToggleAlarmLights (false);
 
 			// Set normal lights to the original colour if they are not the original colour

@@ -112,6 +112,11 @@ public class TutorialManager : MonoBehaviour {
 			case 5:
 				if(!voiceoverSource.isPlaying && tank.fuel > 0.5f){
 					AdvanceStage();
+					door.UnPopDoor();
+				}
+				break;
+			case 6:
+				if(!voiceoverSource.isPlaying){
 					tank.countdownActive = true;
 				}
 				break;
@@ -148,5 +153,13 @@ public class TutorialManager : MonoBehaviour {
 			rightHandLine.target = stage.rightHandTarget;
 		}
 
+	}
+
+	public void PlayClip(AudioClip clip){
+		if(!voiceoverSource.isPlaying){
+			voiceoverSource.Stop();
+			voiceoverSource.clip = clip;
+			voiceoverSource.Play();
+		}
 	}
 }

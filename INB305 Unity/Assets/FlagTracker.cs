@@ -38,10 +38,19 @@ public class FlagTracker : MonoBehaviour {
 
 	public AudioSource dialupSound;
 
+	public AudioClip firstFlagLine, lastFlagLine;
+
+	public List<AudioClip> otherflagLines;
+
+	TutorialManager voiceover;
+
+	FakeTank_Manager tank;
 
 	// Use this for initialization
 	void Start () {
 		GetComponent<VRTK_ControllerEvents>().TriggerUnclicked += new ControllerInteractionEventHandler(DoTriggerUnClicked);
+		voiceover = FindObjectOfType<TutorialManager>();
+		tank = FindObjectOfType<FakeTank_Manager>();
 	}
 
 	void Update(){
@@ -59,24 +68,43 @@ public class FlagTracker : MonoBehaviour {
 			uploadTimer = 0;
 		}
 		else{
-			uploadPanel.SetActive(true);
-			if(flags[nearFlag].active){
-				if(uploadTimer == 0){
-					dialupSound.Play();
+			if(tank.online){
+				uploadPanel.SetActive(true);
+				if(flags[nearFlag].active){
+					if(uploadTimer == 0){
+						dialupSound.Play();
+					}
+					uploadText.text = "Flag " + nearFlag.ToString() + " UPLOADING...";
+					uploadTimer = Mathf.Min(uploadTimer + Time.deltaTime, uploadMaxTime);
+					uploadBar.color = Color.red;
+					uploadBar.fillAmount = Mathf.InverseLerp(0, uploadMaxTime, uploadTimer);
+					if(uploadTimer == uploadMaxTime){
+						flags[nearFlag].active = false;
+						if(numFlagsCapped() == 1){
+							voiceover.PlayClip(firstFlagLine);
+						}
+						else{
+							if(AllFlagsActive()){
+								voiceover.PlayClip(lastFlagLine);
+								tank.ShutdownTank();
+							}
+							else{
+								voiceover.PlayClip(otherflagLines[Random.Range(0, otherflagLines.Count)]);
+							}
+						}
+					}
 				}
-				uploadText.text = "Flag " + nearFlag.ToString() + " UPLOADING...";
-				uploadTimer = Mathf.Min(uploadTimer + Time.deltaTime, uploadMaxTime);
-				uploadBar.color = Color.red;
-				uploadBar.fillAmount = Mathf.InverseLerp(0, uploadMaxTime, uploadTimer);
-				if(uploadTimer == uploadMaxTime){
-					flags[nearFlag].active = false;
+				else{
+					uploadText.text = "UPLOAD COMPLETE!";
+					uploadTimer = uploadMaxTime;
+					uploadBar.color = Color.green;
+					uploadBar.fillAmount = 1;
 				}
 			}
 			else{
-				uploadText.text = "UPLOAD COMPLETE!";
-				uploadTimer = uploadMaxTime;
-				uploadBar.color = Color.green;
-				uploadBar.fillAmount = 1;
+				dialupSound.Stop();
+				uploadPanel.SetActive(false);
+				uploadTimer = 0;
 			}
 		}
 	}
@@ -179,6 +207,16 @@ public class FlagTracker : MonoBehaviour {
 		foreach(Flag f in flags){
     		if(f.active){
     			a = false;
+    		}
+    	}
+    	return a;
+    }
+
+    public int numFlagsCapped(){
+    	int a = 0;
+		foreach(Flag f in flags){
+    		if(!f.active){
+    			++a;
     		}
     	}
     	return a;

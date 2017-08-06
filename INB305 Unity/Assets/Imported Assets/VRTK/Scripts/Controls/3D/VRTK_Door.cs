@@ -506,5 +506,9 @@ namespace VRTK
             doorSnapForce.relativeForce = GetThirdDirection(doorHinge.axis, secondaryDirection) * (subDirection * forceToApply);
 			doorSnapForce.enabled = false;
         }
+
+        public void UnPopDoor(){
+			doorSnapForce.relativeForce = Vector3.zero;
+        }
     }
 }
