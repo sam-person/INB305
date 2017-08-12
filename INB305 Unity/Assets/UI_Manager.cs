@@ -11,6 +11,7 @@ public class UI_Manager : MonoBehaviour {
 	public FlagTracker flagTracker;
 	public GameObject flagPrefab;
 	public Tank_Network network;
+	public Transform playerspace;
 
 	[Header("Minimap 1")]
 	public List<RectTransform> UI_Flags;
@@ -145,6 +146,14 @@ public class UI_Manager : MonoBehaviour {
 		UI_Flags.Add(tank1);
 		UI_Flags2.Add(tank2);
 		DisplayMessage("Flags Reset.");
+	}
+
+	public void SpinPlayerSpace(){
+		playerspace.rotation = Quaternion.Euler(playerspace.rotation.eulerAngles.x, playerspace.rotation.eulerAngles.y + 90, playerspace.rotation.eulerAngles.z);
+	}
+
+	public void ScalePlayerSpace (){
+		
 	}
 
 	Vector2 getRelativePosition(Vector3 input, Vector2 size){

@@ -42,6 +42,8 @@ public class FlagTracker : MonoBehaviour {
 
 	public List<AudioClip> otherflagLines;
 
+	public float buffer;
+
 	TutorialManager voiceover;
 
 	FakeTank_Manager tank;
@@ -74,7 +76,7 @@ public class FlagTracker : MonoBehaviour {
 					if(uploadTimer == 0){
 						dialupSound.Play();
 					}
-					uploadText.text = "Flag " + nearFlag.ToString() + " UPLOADING...";
+					uploadText.text = "FLAG UPLOAD IN PROGRESS...";
 					uploadTimer = Mathf.Min(uploadTimer + Time.deltaTime, uploadMaxTime);
 					uploadBar.color = Color.red;
 					uploadBar.fillAmount = Mathf.InverseLerp(0, uploadMaxTime, uploadTimer);
@@ -164,7 +166,7 @@ public class FlagTracker : MonoBehaviour {
 				z = v.position.z;
     		}
     	}
-    	lowerBound = new Vector3(x-0.5f,0,z-0.5f);
+		lowerBound = new Vector3(x-buffer,0,z-buffer);
 
 		//higher bounds
     	x = Mathf.NegativeInfinity;
@@ -177,7 +179,7 @@ public class FlagTracker : MonoBehaviour {
 				z = v.position.z;
     		}
     	}
-    	higherBound = new Vector3(x+0.5f,0,z+0.5f);
+		higherBound = new Vector3(x+buffer,0,z+buffer);
 
     }
 

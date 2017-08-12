@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 3e7f55a7b3cfcc94594dc177b31ce804
-timeCreated: 1496467927
+timeCreated: 1502513094
 licenseType: Free
 SubstanceImporter:
   serializedVersion: 5
@@ -10,9 +10,9 @@ SubstanceImporter:
     prototypeName: Bitmap2Material_3
     shaderName: 
     shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-    shaderKeywords: _NORMALMAP _PARALLAXMAP
+    shaderKeywords: _EMISSION _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP
     renderQueue: -1
-    lightmapFlags: 5
+    lightmapFlags: 1
     inputs:
     - name: $outputsize
       value:
@@ -967,8 +967,14 @@ SubstanceImporter:
           name: _DstBlend
         second: 0
       - first:
+          name: _GlossMapScale
+        second: 1
+      - first:
           name: _Glossiness
         second: 0.5
+      - first:
+          name: _GlossyReflections
+        second: 1
       - first:
           name: _Metallic
         second: 0
@@ -981,6 +987,12 @@ SubstanceImporter:
       - first:
           name: _Parallax
         second: 0.02
+      - first:
+          name: _SmoothnessTextureChannel
+        second: 0
+      - first:
+          name: _SpecularHighlights
+        second: 1
       - first:
           name: _SrcBlend
         second: 1

@@ -37,6 +37,7 @@ public class FakeTank_Manager : MonoBehaviour {
 	Tank_Network net;
 	TutorialManager voiceover;
 	public FlagTracker flags;
+	public GameObject gameOverlay;
 
 	[Header("Timer")]
 	public TMPro.TextMeshProUGUI timer;
@@ -60,6 +61,7 @@ public class FakeTank_Manager : MonoBehaviour {
 		online = true;
 		timeRemaining = maxTime;
 		flags.ActivateAllFlags();
+		gameOverlay.SetActive (false);
 	}
 
 	public void ShutdownTank(){
@@ -68,6 +70,7 @@ public class FakeTank_Manager : MonoBehaviour {
 		countdownActive = false;
 		timeRemaining = 0;
 		voiceover.tutorialStage = -1;
+		gameOverlay.SetActive (true);
 	}
 	
 	// Update is called once per frame
@@ -76,6 +79,7 @@ public class FakeTank_Manager : MonoBehaviour {
 			display.text = "Tank Offline";
 			lowFuel.text = "OFFLINE";
 			timer.text = "-:--";
+			timer.color = Color.red;
 			return;
 		}
 		crankL = (-(crankL_SpringLever.GetNormalizedValue()/100.0f)+0.5f)*2.0f;

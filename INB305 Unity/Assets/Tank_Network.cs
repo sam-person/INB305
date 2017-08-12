@@ -7,6 +7,7 @@ using System.Text;
 
 public class Tank_Network : MonoBehaviour {
 	public bool useNetwork = false;
+	public bool useTestControls = false;
 
 
 	public string ip;
@@ -41,6 +42,28 @@ public class Tank_Network : MonoBehaviour {
 			//Send ("rb000");
 			Debug.Log ("Stop");
 		}
+
+		if (useTestControls && useNetwork) {
+			if (Input.GetKey(KeyCode.Keypad7)) {
+				Send ("lf040");
+			}
+			if (Input.GetKey(KeyCode.Keypad4)) {
+				Send ("lf000");
+			}
+			if (Input.GetKey(KeyCode.Keypad1)) {
+				Send ("lb040");
+			}
+
+			if (Input.GetKey(KeyCode.Keypad9)) {
+				Send ("rf040");
+			}
+			if (Input.GetKey(KeyCode.Keypad6)) {
+				Send ("rf000");
+			}
+			if (Input.GetKey(KeyCode.Keypad3)) {
+				Send ("rb040");
+			}
+		}
 	}
 
 	void Connect(string ip_, int port_){
@@ -48,7 +71,7 @@ public class Tank_Network : MonoBehaviour {
 		IPEndPoint ipendpoint = new IPEndPoint (ipaddress, port_);
 		sender = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		sender.Connect (ipendpoint);
-		Debug.Log (sender.RemoteEndPoint.ToString ());
+		Debug.Log ("Connected to tank @ " + sender.RemoteEndPoint.ToString ());
 		connected = true;
 	}
 

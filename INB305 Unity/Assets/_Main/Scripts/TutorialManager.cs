@@ -85,6 +85,7 @@ public class TutorialManager : MonoBehaviour {
 		switch(tutorialStage){
 			case 0:
 				if(!voiceoverSource.isPlaying){
+					tank.countdownActive = true;
 					AdvanceStage();
 				}
 				break;
@@ -94,30 +95,31 @@ public class TutorialManager : MonoBehaviour {
 				}
 				break;
 			case 2:
-				if(!voiceoverSource.isPlaying && tank.fuel < 0.2f){
-					AdvanceStage();
-				}
-				break;
-			case 3:
 				if(!voiceoverSource.isPlaying && shovel_interactable.IsGrabbed()){
 					AdvanceStage();
 				}
 				break;
-			case 4:
+			case 3:
 				if(!voiceoverSource.isPlaying && shovel.coalAmount > 0){
 					AdvanceStage();
 					door.popDoor();
 				}
 				break;
-			case 5:
-				if(!voiceoverSource.isPlaying && tank.fuel > 0.5f){
+			case 4:
+				if(!voiceoverSource.isPlaying && tank.fuel > 0.2f){
 					AdvanceStage();
 					door.UnPopDoor();
+					tank.fuel = 0.7f;
+				}
+				break;
+			case 5:
+				if(!voiceoverSource.isPlaying){
+					AdvanceStage();
 				}
 				break;
 			case 6:
 				if(!voiceoverSource.isPlaying){
-					tank.countdownActive = true;
+					AdvanceStage ();
 				}
 				break;
 		}
