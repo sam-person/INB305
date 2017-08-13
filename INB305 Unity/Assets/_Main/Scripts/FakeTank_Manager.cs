@@ -71,6 +71,7 @@ public class FakeTank_Manager : MonoBehaviour {
 		timeRemaining = 0;
 		voiceover.tutorialStage = -1;
 		gameOverlay.SetActive (true);
+		net.AllStop ();
 	}
 	
 	// Update is called once per frame
@@ -80,6 +81,7 @@ public class FakeTank_Manager : MonoBehaviour {
 			lowFuel.text = "OFFLINE";
 			timer.text = "-:--";
 			timer.color = Color.red;
+			net.AllStop ();
 			return;
 		}
 		crankL = (-(crankL_SpringLever.GetNormalizedValue()/100.0f)+0.5f)*2.0f;

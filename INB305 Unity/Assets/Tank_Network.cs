@@ -36,32 +36,28 @@ public class Tank_Network : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Return)) {
-			Send ("lf000");
-			//Send ("lb000");
-			Send ("rf000");
-			//Send ("rb000");
-			Debug.Log ("Stop");
+			AllStop ();
 		}
 
 		if (useTestControls && useNetwork) {
 			if (Input.GetKey(KeyCode.Keypad7)) {
-				Send ("lf040");
+				Send ("lf050");
 			}
 			if (Input.GetKey(KeyCode.Keypad4)) {
 				Send ("lf000");
 			}
 			if (Input.GetKey(KeyCode.Keypad1)) {
-				Send ("lb040");
+				Send ("lb050");
 			}
 
 			if (Input.GetKey(KeyCode.Keypad9)) {
-				Send ("rf040");
+				Send ("rf050");
 			}
 			if (Input.GetKey(KeyCode.Keypad6)) {
 				Send ("rf000");
 			}
 			if (Input.GetKey(KeyCode.Keypad3)) {
-				Send ("rb040");
+				Send ("rb050");
 			}
 		}
 	}
@@ -113,14 +109,11 @@ public class Tank_Network : MonoBehaviour {
 		sender.Close ();
 	}
 
-	void AllStop(){
-		Send ("af000");
-		Send ("bf000");
-		Send ("cf000");
-		Send ("df000");
-		Send ("ef000");
-
-
-		Debug.Log ("All Stop");
+	public void AllStop(){
+		Send ("lf000");
+		//Send ("lb000");
+		Send ("rf000");
+		//Send ("rb000");
+		Debug.Log ("Stop");
 	}
 }

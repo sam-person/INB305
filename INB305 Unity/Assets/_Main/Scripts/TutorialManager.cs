@@ -53,9 +53,15 @@ public class TutorialManager : MonoBehaviour {
 	public VRTK.VRTK_InteractableObject shovel_interactable;
 	Shovel shovel;
 
+	Vector3 shovelStartpos;
+	Quaternion shovelStartRot;
+
 	void Awake(){
 		tank = FindObjectOfType<FakeTank_Manager>();
 		shovel = shovel_interactable.GetComponent<Shovel>();
+		//shovelStart = new Transform ();
+		shovelStartpos = shovel.transform.position;
+		shovelStartRot = shovel.transform.rotation;
 	}
 
 	// Use this for initialization
@@ -71,6 +77,7 @@ public class TutorialManager : MonoBehaviour {
 			StartStage(stages[0]);
 			tank.fuel = 0.25f;
 			tank.StartupTank();
+			RespawnShovel ();
 			return true;
 		}
 		else{
@@ -163,5 +170,10 @@ public class TutorialManager : MonoBehaviour {
 			voiceoverSource.clip = clip;
 			voiceoverSource.Play();
 		}
+	}
+
+	public void RespawnShovel(){
+		shovel.transform.position = shovelStartpos;
+		shovel.transform.rotation = shovelStartRot;
 	}
 }

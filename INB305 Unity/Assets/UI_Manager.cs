@@ -66,6 +66,7 @@ public class UI_Manager : MonoBehaviour {
 		else{
 			degrees = Vector3.Angle(flagTracker.tracker.transform.right, Vector3.right);
 		}
+		degrees += 180;
 
 		//1
 		UI_Flags[0].anchoredPosition = getRelativePosition(flagTracker.tracker.transform.position, MinimapSize);
@@ -152,8 +153,8 @@ public class UI_Manager : MonoBehaviour {
 		playerspace.rotation = Quaternion.Euler(playerspace.rotation.eulerAngles.x, playerspace.rotation.eulerAngles.y + 90, playerspace.rotation.eulerAngles.z);
 	}
 
-	public void ScalePlayerSpace (){
-		
+	public void ReswpanShovel(){
+		tutorial.RespawnShovel ();
 	}
 
 	Vector2 getRelativePosition(Vector3 input, Vector2 size){
