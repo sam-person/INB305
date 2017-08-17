@@ -54,12 +54,12 @@ public class Furnace : MonoBehaviour {
 		fireEmissions.x = Mathf.Floor(fireEmissions.y * 0.3f);
 
 		// Initialising variables for smokeParticles
-		smokeMainModule = smokeParticles.main; // Start Life Time
-		smokeStartLifeTime.y = smokeMainModule.startLifetime.constant;
-		smokeStartSize.y = smokeMainModule.startSize.constant; // Start Size
+		//smokeMainModule = smokeParticles.main; // Start Life Time
+		//smokeStartLifeTime.y = smokeMainModule.startLifetime.constant;
+		//smokeStartSize.y = smokeMainModule.startSize.constant; // Start Size
 
-		smokeEmissionModule = smokeParticles.emission; // Emission Rate
-		smokeEmissions.y = smokeEmissionModule.rateOverTime.constant;
+		//smokeEmissionModule = smokeParticles.emission; // Emission Rate
+		//smokeEmissions.y = smokeEmissionModule.rateOverTime.constant;
 
 		// Initialising variables for emberParticles
 		emberEmissionModule = embersParticles.emission; // Emission Rate
@@ -114,13 +114,13 @@ public class Furnace : MonoBehaviour {
 	// Scales the start lifetime, start size and emission rate of the Smoke Particles based on fuel
 	void ScaleSmokeParticles() {
 		// start lifetime
-		smokeMainModule.startLifetime = LerpBasedOnFuel(smokeStartLifeTime);
+		//smokeMainModule.startLifetime = LerpBasedOnFuel(smokeStartLifeTime);
 
 		// start size
-		smokeMainModule.startSize = LerpBasedOnFuel(smokeStartSize);
+		//smokeMainModule.startSize = LerpBasedOnFuel(smokeStartSize);
 
 		// emission
-		smokeEmissionModule.rateOverTime = LerpBasedOnFuel(smokeEmissions);
+		//smokeEmissionModule.rateOverTime = LerpBasedOnFuel(smokeEmissions);
 	}
 
 	// Scales the emission rate of the Ember Particles based on fuel

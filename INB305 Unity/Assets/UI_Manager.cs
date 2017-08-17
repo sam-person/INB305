@@ -40,7 +40,7 @@ public class UI_Manager : MonoBehaviour {
 
 		if(UI_Flags2.Count - 1 < flagTracker.flags.Count){
 			UI_Flags2.Add(Instantiate(flagPrefab, minimapPanel2).GetComponent<RectTransform>());
-			UI_Flags2[UI_Flags2.Count-1].GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+			UI_Flags2[UI_Flags2.Count-1].GetComponent<RectTransform>().localScale = new Vector3(2,2,2);
 			UI_Flags2[UI_Flags2.Count-1].GetComponent<RectTransform>().position = minimapPanel2.position;
 		}
 
