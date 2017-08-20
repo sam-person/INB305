@@ -102,21 +102,21 @@ public class TutorialManager : MonoBehaviour {
 				}
 				break;
 			case 2:
-				if(!voiceoverSource.isPlaying && shovel_interactable.IsGrabbed()){
+				if(shovel_interactable.IsGrabbed()){
 					AdvanceStage();
 				}
 				break;
 			case 3:
-				if(!voiceoverSource.isPlaying && shovel.coalAmount > 0){
+				if(shovel.coalAmount > 0){
 					AdvanceStage();
 					door.popDoor();
 				}
 				break;
 			case 4:
-				if(!voiceoverSource.isPlaying && tank.fuel > 0.2f){
+				if(tank.fuel > 0.2f){
 					AdvanceStage();
 					door.UnPopDoor();
-					tank.fuel = 0.7f;
+					tank.fuel += 0.7f;
 				}
 				break;
 			case 5:

@@ -24,7 +24,7 @@ public class Tank_Network : MonoBehaviour {
 		if (!useNetwork) {
 			return;
 		}
-		Connect (ip, port);
+		Connect ();
 	}
 
 	// Left Forward 50: lf050
@@ -41,35 +41,38 @@ public class Tank_Network : MonoBehaviour {
 
 		if (useTestControls && useNetwork) {
 			if (Input.GetKey(KeyCode.Keypad7)) {
-				Send ("lf050");
+				Send ("lf100");
 			}
 			if (Input.GetKey(KeyCode.Keypad4)) {
 				Send ("lf000");
 			}
 			if (Input.GetKey(KeyCode.Keypad1)) {
-				Send ("lb050");
+				Send ("lb100");
 			}
 
 			if (Input.GetKey(KeyCode.Keypad9)) {
-				Send ("rf050");
+				Send ("rf100");
 			}
 			if (Input.GetKey(KeyCode.Keypad6)) {
 				Send ("rf000");
 			}
 			if (Input.GetKey(KeyCode.Keypad3)) {
-				Send ("rb050");
+				Send ("rb100");
 			}
 		}
+
+		connected = sender.Connected;
 	}
 
-	void Connect(string ip_, int port_){
-		IPAddress ipaddress = IPAddress.Parse (ip_);
-		IPEndPoint ipendpoint = new IPEndPoint (ipaddress, port_);
+	public void Connect(){
+		IPAddress ipaddress = IPAddress.Parse (ip);
+		IPEndPoint ipendpoint = new IPEndPoint (ipaddress, port);
 		sender = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		sender.Connect (ipendpoint);
 		Debug.Log ("Connected to tank @ " + sender.RemoteEndPoint.ToString ());
-		connected = true;
+		//connected = true;
 	}
+		
 
 	void Send(string message){
 		byte[] msg = Encoding.ASCII.GetBytes (message);
@@ -104,6 +107,10 @@ public class Tank_Network : MonoBehaviour {
 		if (!useNetwork) {
 			return;
 		}
+		Disconnect ();
+	}
+
+	public void Disconnect(){
 		Debug.Log ("Closed network conection");
 		sender.Shutdown (SocketShutdown.Both);
 		sender.Close ();
